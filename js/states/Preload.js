@@ -7,7 +7,7 @@ TruckDrop.PreloadState = {
         var preloadProgress = this.add.sprite((this.world.width - 540) * 0.5, (this.world.height + 170) * 0.5, 'loading-progress');
         this.load.setPreloadSprite(preloadProgress);
 
-        this.load.image('imageId', 'assets/images/imageName.png');
+        this.load.image('hill', 'assets/images/hill.png');
     },
     create: function ()
     {

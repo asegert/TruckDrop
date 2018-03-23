@@ -8,6 +8,10 @@ TruckDrop.PreloadState = {
         this.load.setPreloadSprite(preloadProgress);
 
         this.load.image('hill', 'assets/images/hill.png');
+        this.load.tilemap('hills','assets/images/hill..json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.spritesheet('tiles', 'assets/images/ninja-tiles64.png', 64, 64);
+        this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 4);
+        this.load.spritesheet('truck', 'assets/images/player.png', 117, 59, 5);
     },
     create: function ()
     {

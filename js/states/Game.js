@@ -5,19 +5,22 @@ TruckDrop.GameState = {
     {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
-        
+        //Number of bombs to be used to propel
         this.bombs = 1;
+        //Score -> based off coins
         this.score = 0;
+        //Current life in array
         this.currlife = 2;
-        
+        //Holds the life hearts
         this.lives = new Array();
         this.lives[0] = this.add.sprite(0, 20, 'fullHeart');
         this.lives[1] = this.add.sprite(60, 20, 'fullHeart');
         this.lives[2] = this.add.sprite(120, 20, 'fullHeart');
+        //Fixes the lives to the camera
         this.lives[0].fixedToCamera = true;
         this.lives[1].fixedToCamera = true;
         this.lives[2].fixedToCamera = true;
-        
+        //Button to allow the truck to continue if the player has a bomb
         this.continue = this.add.button(0, 550, 'bomb', function()
         {
             if(this.bombs >0)
@@ -25,12 +28,16 @@ TruckDrop.GameState = {
                 this.bombs--;
                 this.continueText.setText(this.bombs);
             
-                let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
+                let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);//fix
                 tween.onComplete.add(function()
                 {
                     this.truck.body.gravity.y = 100;
                     this.truck.body.gravity.x = 0.5;
                 }, this);
+            }
+            else
+            {
+                console.log('GameOver');
             }
         }, this);
         
@@ -40,7 +47,7 @@ TruckDrop.GameState = {
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
 
-        let map = this.add.tilemap('hills');    
+        let map = this.add.tilemap('hills');                        //Maps to func pass var for this.coinMap
         map.addTilesetImage('sandSprite', 'sandSprite');
         map.setCollision(1);
         map.setCollision(2);

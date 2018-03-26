@@ -6,22 +6,36 @@ TruckDrop.GameState = {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
         
-        this.bombs = 3;
+        this.bombs = 1;
         this.score = 0;
-        this.continue = this.add.button(0, 0, 'bomb', function()
+        this.currlife = 2;
+        
+        this.lives = new Array();
+        this.lives[0] = this.add.sprite(0, 20, 'fullHeart');
+        this.lives[1] = this.add.sprite(60, 20, 'fullHeart');
+        this.lives[2] = this.add.sprite(120, 20, 'fullHeart');
+        this.lives[0].fixedToCamera = true;
+        this.lives[1].fixedToCamera = true;
+        this.lives[2].fixedToCamera = true;
+        
+        this.continue = this.add.button(0, 550, 'bomb', function()
         {
-            this.bombs--;
-            this.continueText.setText(this.bombs);
-            
-            let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
-            tween.onComplete.add(function()
+            if(this.bombs >0)
             {
-                this.truck.body.gravity.y = 100;
-                this.truck.body.gravity.x = 0.5;
-            }, this);
+                this.bombs--;
+                this.continueText.setText(this.bombs);
+            
+                let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
+                tween.onComplete.add(function()
+                {
+                    this.truck.body.gravity.y = 100;
+                    this.truck.body.gravity.x = 0.5;
+                }, this);
+            }
         }, this);
+        
         this.continue.fixedToCamera = true;
-        this.continueText = this.add.text(26, 25, this.bombs, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
+        this.continueText = this.add.text(26, 575, this.bombs, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.continueText.fixedToCamera = true;
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
@@ -76,6 +90,7 @@ TruckDrop.GameState = {
         this.coinMap.setCollision(15);
         this.coinMap.setCollision(16);
         this.coinMap.setCollision(17);
+        this.coinMap.setCollision(18);
         this.coin = this.coinMap.createLayer('CoinLayer');  
         this.coin.resizeWorld();
 
@@ -93,6 +108,9 @@ TruckDrop.GameState = {
         this.world.bringToTop(this.continue);
         this.world.bringToTop(this.continueText);
         this.world.bringToTop(this.scoreText);
+        this.world.bringToTop(this.lives[0]);
+        this.world.bringToTop(this.lives[1]);
+        this.world.bringToTop(this.lives[2]);
     },
     ground: function(truck, object)
     {
@@ -101,6 +119,22 @@ TruckDrop.GameState = {
         truck.body.gravity.y = 0;
         truck.body.velocity.x = 0;
         truck.body.velocity.y = 0;
+        
+        if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
+        {
+            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
+        }
+        else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
+        {
+            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
+            
+            TruckDrop.GameState.currlife--;
+            
+            if(TruckDrop.GameState.currlife<0)
+            {
+                console.log('GameOver');
+            }
+        }
     },
     collect: function(truck, coin)
     {
@@ -116,7 +150,7 @@ TruckDrop.GameState = {
             TruckDrop.GameState.score+=1;
             TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
-        else if(coin.index===17)
+        else if(coin.index===18)
         {
             console.log("bomb");
             TruckDrop.GameState.bombs++;
@@ -127,6 +161,21 @@ TruckDrop.GameState = {
             console.log("gold");
             TruckDrop.GameState.score+=3;
             TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
+        }
+        else if(coin.index===17)
+        {
+            console.log("heart");
+            
+            if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
+            {
+                TruckDrop.GameState.currlife++;
+                if(TruckDrop.GameState.currlife > 2)
+                {
+                    TruckDrop.GameState.currlife = 2;
+                }
+            }
+                
+            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("fullHeart");
         }
         TruckDrop.GameState.coinMap.removeTile(coin.x, coin.y);
     },

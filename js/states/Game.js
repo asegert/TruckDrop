@@ -5,20 +5,27 @@ TruckDrop.GameState = {
     {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
+        
+        this.continue = this.add.button(0, 0, 'bomb', function()
+        {
+            console.log('propel');
+            let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
+            tween.onComplete.add(function()
+            {
+                this.truck.body.gravity.y = 100;
+                this.truck.body.gravity.x = 0.5;
+            }, this);
+        }, this);
+        this.continue.fixedToCamera = true;
 
         let map = this.add.tilemap('hills');    
         map.addTilesetImage('sandSprite', 'sandSprite');
-        //map.addTilesetImage('Objects', 'Objects');
         map.setCollision(1);
         map.setCollision(2);
         map.setCollision(3);
         map.setCollision(4);
         this.hill = map.createLayer('HillLayer');   
-        
-        //this.objectGroup = this.game.add.physicsGroup();
-        //this.map.createFromTiles([11, 12, 13, 14, 15, 16, 17], 0, 'obstacle', this.hill, this.objectGroup);
-        //this.objects = map.createLayer('ObjectLayer');   
-        //this.objects.resizeWorld();
+
         this.hill.resizeWorld();
         this.game.slopes.convertTilemapLayer(this.hill, {
             2:  'FULL',
@@ -43,24 +50,35 @@ TruckDrop.GameState = {
         objectMap.setCollision(14);
         objectMap.setCollision(15);
         objectMap.setCollision(16);
+        objectMap.setCollision(17);
         this.object = objectMap.createLayer('ObjectLayer');  
         this.object.resizeWorld();
-        
-        //this.objectGroup = this.game.add.physicsGroup();
-        //this.map.createFromTiles([11, 12, 13, 14, 15, 16, 17], 0, 'obstacle', this.hill, this.objectGroup);
-        //this.objects = map.createLayer('ObjectLayer');   
-        //this.objects.resizeWorld();
-        //this.object.resizeWorld();
         this.game.slopes.convertTilemapLayer(this.object, {
             9:  'HALF_BOTTOM'
         });
         
-        
-        
-        
-        
-        
-        
+        let coinMap = this.add.tilemap('coins');    
+        coinMap.addTilesetImage('sandSprite', 'sandSprite');
+        coinMap.setCollision(1);
+        coinMap.setCollision(2);
+        coinMap.setCollision(3);
+        coinMap.setCollision(4);
+        coinMap.setCollision(5);
+        coinMap.setCollision(6);
+        coinMap.setCollision(7);
+        coinMap.setCollision(8);
+        coinMap.setCollision(9);
+        coinMap.setCollision(10);
+        coinMap.setCollision(11);
+        coinMap.setCollision(12);
+        coinMap.setCollision(13);
+        coinMap.setCollision(14);
+        coinMap.setCollision(15);
+        coinMap.setCollision(16);
+        coinMap.setCollision(17);
+        this.coin = coinMap.createLayer('CoinLayer');  
+        this.coin.resizeWorld();
+
         
         this.truck = this.add.sprite(350, 5, 'truck');
         this.truck.animations.add('roll');
@@ -70,8 +88,9 @@ TruckDrop.GameState = {
         this.truck.body.gravity.y = 100;
         this.truck.body.gravity.x = 0.5;
  
-this.game.slopes.enable(this.truck);
-this.game.camera.follow(this.truck);
+        this.game.slopes.enable(this.truck);
+        this.game.camera.follow(this.truck);
+        this.world.bringToTop(this.continue);
     },
     ground: function(truck, object)
     {
@@ -81,16 +100,15 @@ this.game.camera.follow(this.truck);
         truck.body.velocity.x = 0;
         truck.body.velocity.y = 0;
     },
+    collect: function(truck, coin)
+    {
+        console.log('collect');
+    },
     update: function ()
     {
         this.game.physics.arcade.collide(this.truck, this.hill);
         this.game.physics.arcade.collide(this.truck, this.object, this.ground);
-        this.game.physics.arcade.collide(this.object, this.truck, this.ground, null, this);
-        //0.75 -> 1.0625;
-        /*if(this.hill.tilePosition.y > -3840)
-        {this.hill.tilePosition.y -= 1.5;}
-        if(this.hill.tilePosition.x > -5430)
-        {this.hill.tilePosition.x -= 2.125;}*/
+        this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);
         
     }
 };

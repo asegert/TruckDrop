@@ -57,26 +57,26 @@ TruckDrop.GameState = {
             9:  'HALF_BOTTOM'
         });
         
-        let coinMap = this.add.tilemap('coins');    
-        coinMap.addTilesetImage('sandSprite', 'sandSprite');
-        coinMap.setCollision(1);
-        coinMap.setCollision(2);
-        coinMap.setCollision(3);
-        coinMap.setCollision(4);
-        coinMap.setCollision(5);
-        coinMap.setCollision(6);
-        coinMap.setCollision(7);
-        coinMap.setCollision(8);
-        coinMap.setCollision(9);
-        coinMap.setCollision(10);
-        coinMap.setCollision(11);
-        coinMap.setCollision(12);
-        coinMap.setCollision(13);
-        coinMap.setCollision(14);
-        coinMap.setCollision(15);
-        coinMap.setCollision(16);
-        coinMap.setCollision(17);
-        this.coin = coinMap.createLayer('CoinLayer');  
+        this.coinMap = this.add.tilemap('coins');    
+        this.coinMap.addTilesetImage('sandSprite', 'sandSprite');
+        this.coinMap.setCollision(1);
+        this.coinMap.setCollision(2);
+        this.coinMap.setCollision(3);
+        this.coinMap.setCollision(4);
+        this.coinMap.setCollision(5);
+        this.coinMap.setCollision(6);
+        this.coinMap.setCollision(7);
+        this.coinMap.setCollision(8);
+        this.coinMap.setCollision(9);
+        this.coinMap.setCollision(10);
+        this.coinMap.setCollision(11);
+        this.coinMap.setCollision(12);
+        this.coinMap.setCollision(13);
+        this.coinMap.setCollision(14);
+        this.coinMap.setCollision(15);
+        this.coinMap.setCollision(16);
+        this.coinMap.setCollision(17);
+        this.coin = this.coinMap.createLayer('CoinLayer');  
         this.coin.resizeWorld();
 
         
@@ -102,7 +102,23 @@ TruckDrop.GameState = {
     },
     collect: function(truck, coin)
     {
-        console.log('collect');
+        if(coin.index===9)
+        {
+            console.log("silver");
+        }
+        else if(coin.index===7)
+        {
+            console.log("bronze");
+        }
+        else if(coin.index===17)
+        {
+            console.log("bomb");
+        }
+        else if(coin.index===8)
+        {
+            console.log("gold");
+        }
+        TruckDrop.GameState.coinMap.removeTile(coin.x, coin.y);
     },
     update: function ()
     {

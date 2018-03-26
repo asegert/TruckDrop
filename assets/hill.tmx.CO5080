@@ -7,6 +7,9 @@
  <tileset firstgid="1" name="sandSprite" tilewidth="70" tileheight="70" tilecount="16" columns="16">
   <image source="images/sandSprite.png" width="1120" height="70"/>
  </tileset>
+ <tileset firstgid="17" name="Tiles" tilewidth="70" tileheight="70" tilecount="16" columns="16">
+  <image source="images/sandSprite.png" width="1120" height="70"/>
+ </tileset>
  <layer name="HillLayer" width="92" height="64">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -6,7 +6,8 @@ TruckDrop.GameState = {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
         
-        this.bombs=3;
+        this.bombs = 3;
+        this.score = 0;
         this.continue = this.add.button(0, 0, 'bomb', function()
         {
             this.bombs--;
@@ -22,6 +23,8 @@ TruckDrop.GameState = {
         this.continue.fixedToCamera = true;
         this.continueText = this.add.text(26, 25, this.bombs, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.continueText.fixedToCamera = true;
+        this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
+        this.scoreText.fixedToCamera = true;
 
         let map = this.add.tilemap('hills');    
         map.addTilesetImage('sandSprite', 'sandSprite');
@@ -89,6 +92,7 @@ TruckDrop.GameState = {
         this.game.camera.follow(this.truck);
         this.world.bringToTop(this.continue);
         this.world.bringToTop(this.continueText);
+        this.world.bringToTop(this.scoreText);
     },
     ground: function(truck, object)
     {
@@ -103,10 +107,14 @@ TruckDrop.GameState = {
         if(coin.index===9)
         {
             console.log("silver");
+            TruckDrop.GameState.score+=2;
+            TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
         else if(coin.index===7)
         {
             console.log("bronze");
+            TruckDrop.GameState.score+=1;
+            TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
         else if(coin.index===17)
         {
@@ -117,6 +125,8 @@ TruckDrop.GameState = {
         else if(coin.index===8)
         {
             console.log("gold");
+            TruckDrop.GameState.score+=3;
+            TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
         TruckDrop.GameState.coinMap.removeTile(coin.x, coin.y);
     },

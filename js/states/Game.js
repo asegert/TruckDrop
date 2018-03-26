@@ -6,9 +6,12 @@ TruckDrop.GameState = {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
         
+        this.bombs=3;
         this.continue = this.add.button(0, 0, 'bomb', function()
         {
-            console.log('propel');
+            this.bombs--;
+            this.continueText.setText(this.bombs);
+            
             let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
             tween.onComplete.add(function()
             {
@@ -17,6 +20,8 @@ TruckDrop.GameState = {
             }, this);
         }, this);
         this.continue.fixedToCamera = true;
+        this.continueText = this.add.text(26, 25, this.bombs, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
+        this.continueText.fixedToCamera = true;
 
         let map = this.add.tilemap('hills');    
         map.addTilesetImage('sandSprite', 'sandSprite');
@@ -34,10 +39,6 @@ TruckDrop.GameState = {
         
         let objectMap = this.add.tilemap('objects');    
         objectMap.addTilesetImage('sandSprite', 'sandSprite');
-        objectMap.setCollision(1);
-        objectMap.setCollision(2);
-        objectMap.setCollision(3);
-        objectMap.setCollision(4);
         objectMap.setCollision(5);
         objectMap.setCollision(6);
         objectMap.setCollision(7);
@@ -59,10 +60,6 @@ TruckDrop.GameState = {
         
         this.coinMap = this.add.tilemap('coins');    
         this.coinMap.addTilesetImage('sandSprite', 'sandSprite');
-        this.coinMap.setCollision(1);
-        this.coinMap.setCollision(2);
-        this.coinMap.setCollision(3);
-        this.coinMap.setCollision(4);
         this.coinMap.setCollision(5);
         this.coinMap.setCollision(6);
         this.coinMap.setCollision(7);
@@ -91,6 +88,7 @@ TruckDrop.GameState = {
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
         this.world.bringToTop(this.continue);
+        this.world.bringToTop(this.continueText);
     },
     ground: function(truck, object)
     {
@@ -113,6 +111,8 @@ TruckDrop.GameState = {
         else if(coin.index===17)
         {
             console.log("bomb");
+            TruckDrop.GameState.bombs++;
+            TruckDrop.GameState.continueText.setText(TruckDrop.GameState.bombs);
         }
         else if(coin.index===8)
         {

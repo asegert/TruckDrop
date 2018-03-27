@@ -47,59 +47,12 @@ TruckDrop.GameState = {
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
 
-        let map = this.add.tilemap('hills');                        //Maps to func pass var for this.coinMap
-        map.addTilesetImage('sandSprite', 'sandSprite');
-        map.setCollision(1);
-        map.setCollision(2);
-        map.setCollision(3);
-        map.setCollision(4);
-        this.hill = map.createLayer('HillLayer');   
-
-        this.hill.resizeWorld();
-        this.game.slopes.convertTilemapLayer(this.hill, {
-            2:  'FULL',
-            4:  'HALF_BOTTOM_Left'
-        });
+        this.hill = this.initMapLevel('hills', 'HillLayer', false);     
+        this.object = this.initMapLevel('objects', 'ObjectLayer', false); 
         
-        let objectMap = this.add.tilemap('objects');    
-        objectMap.addTilesetImage('sandSprite', 'sandSprite');
-        objectMap.setCollision(5);
-        objectMap.setCollision(6);
-        objectMap.setCollision(7);
-        objectMap.setCollision(8);
-        objectMap.setCollision(9);
-        objectMap.setCollision(10);
-        objectMap.setCollision(11);
-        objectMap.setCollision(12);
-        objectMap.setCollision(13);
-        objectMap.setCollision(14);
-        objectMap.setCollision(15);
-        objectMap.setCollision(16);
-        objectMap.setCollision(17);
-        this.object = objectMap.createLayer('ObjectLayer');  
-        this.object.resizeWorld();
-        this.game.slopes.convertTilemapLayer(this.object, {
-            9:  'HALF_BOTTOM'
-        });
-        
-        this.coinMap = this.add.tilemap('coins');    
-        this.coinMap.addTilesetImage('sandSprite', 'sandSprite');
-        this.coinMap.setCollision(5);
-        this.coinMap.setCollision(6);
-        this.coinMap.setCollision(7);
-        this.coinMap.setCollision(8);
-        this.coinMap.setCollision(9);
-        this.coinMap.setCollision(10);
-        this.coinMap.setCollision(11);
-        this.coinMap.setCollision(12);
-        this.coinMap.setCollision(13);
-        this.coinMap.setCollision(14);
-        this.coinMap.setCollision(15);
-        this.coinMap.setCollision(16);
-        this.coinMap.setCollision(17);
-        this.coinMap.setCollision(18);
-        this.coin = this.coinMap.createLayer('CoinLayer');  
-        this.coin.resizeWorld();
+        let coinMapArray = this.initMapLevel('coins', 'CoinLayer', true);
+        this.coinMap = coinMapArray[1];    
+        this.coin = coinMapArray[0];  
 
         
         this.truck = this.add.sprite(350, 5, 'truck');
@@ -118,6 +71,45 @@ TruckDrop.GameState = {
         this.world.bringToTop(this.lives[0]);
         this.world.bringToTop(this.lives[1]);
         this.world.bringToTop(this.lives[2]);
+    },
+    initMapLevel: function(mapName, layerName, map)
+    {
+        map = this.add.tilemap (mapName);
+        map.addTilesetImage('sandSprite', 'sandSprite');
+        map.setCollision(1);
+        map.setCollision(2);
+        map.setCollision(3);
+        map.setCollision(4);
+        map.setCollision(5);
+        map.setCollision(6);
+        map.setCollision(7);
+        map.setCollision(8);
+        map.setCollision(9);
+        map.setCollision(10);
+        map.setCollision(11);
+        map.setCollision(12);
+        map.setCollision(13);
+        map.setCollision(14);
+        map.setCollision(15);
+        map.setCollision(16);
+        map.setCollision(17);
+        map.setCollision(18);
+        
+        var layer = map.createLayer(layerName);
+        layer.resizeWorld();
+        
+        this.game.slopes.convertTilemapLayer(layer, {
+            2:  'FULL',
+            4:  'HALF_BOTTOM_Left',
+            9:  'HALF_BOTTOM'
+        });
+        
+        if(map)
+        {
+            return [layer, map];
+        }
+        
+        return layer;
     },
     ground: function(truck, object)
     {

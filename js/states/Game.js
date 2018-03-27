@@ -246,7 +246,8 @@ TruckDrop.GameState = {
     {
         if(this.currLevel === this.truckData.Levels.length-1)
         {
-            console.log('GO');//go to end
+            console.log('GO');
+            this.state.start('End');
         }
         else
         {

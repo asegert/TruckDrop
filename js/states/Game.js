@@ -28,11 +28,13 @@ TruckDrop.GameState = {
                 this.bombs--;
                 this.continueText.setText(this.bombs);
             
+                this.add.tween(this.truck).to({rotation: -0.4}, 100, "Linear", true);
                 let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);//fix
                 tween.onComplete.add(function()
                 {
-                    this.truck.body.gravity.y = 100;
-                    this.truck.body.gravity.x = 0.5;
+                    this.truck.body.gravity.y = 300;
+                    this.truck.body.gravity.x = 1.5;
+                    TruckDrop.GameState.rotate = false;
                 }, this);
             }
             else
@@ -55,9 +57,10 @@ TruckDrop.GameState = {
         this.coin = coinMapArray[0];  
 
         
-        this.truck = this.add.sprite(350, 5, 'truck');
+        this.truck = this.add.sprite(420, 5, 'truck');
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
+        this.truck.anchor.setTo(0.1, 0.1);
         
         this.physics.enable(this.truck, Phaser.Physics.ARCADE);
         this.truck.body.gravity.y = 100;
@@ -101,7 +104,9 @@ TruckDrop.GameState = {
         this.game.slopes.convertTilemapLayer(layer, {
             2:  'FULL',
             4:  'HALF_BOTTOM_Left',
-            9:  'HALF_BOTTOM'
+            9:  'HALF_BOTTOM',
+            10:  'HALF_BOTTOM',
+            11:  'HALF_BOTTOM'
         });
         
         if(map)
@@ -114,26 +119,28 @@ TruckDrop.GameState = {
     ground: function(truck, object)
     {
         console.log('stop');
+        if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0)
+        {
+            if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
+            {
+                TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
+            }
+            else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
+            {
+                TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
+            
+                TruckDrop.GameState.currlife--;
+            
+                if(TruckDrop.GameState.currlife<0)
+                {
+                    console.log('GameOver');
+                }
+            }
+        }
         truck.body.gravity.x = 0;
         truck.body.gravity.y = 0;
         truck.body.velocity.x = 0;
         truck.body.velocity.y = 0;
-        
-        if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
-        {
-            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
-        }
-        else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
-        {
-            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
-            
-            TruckDrop.GameState.currlife--;
-            
-            if(TruckDrop.GameState.currlife<0)
-            {
-                console.log('GameOver');
-            }
-        }
     },
     collect: function(truck, coin)
     {
@@ -178,12 +185,34 @@ TruckDrop.GameState = {
         }
         TruckDrop.GameState.coinMap.removeTile(coin.x, coin.y);
     },
+    tip: function(truck, hill)
+    {
+        TruckDrop.GameState.truck.body.gravity.y = 100;
+        TruckDrop.GameState.truck.body.gravity.x = 0.5;
+        
+        if(hill.index === 4)
+        {
+            console.log('hill');
+            if(!TruckDrop.GameState.rotate)
+            {
+                TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0.7}, 1000, "Linear", true);
+                TruckDrop.GameState.rotate = true;
+            }
+        }
+        else
+        {
+           if(TruckDrop.GameState.rotate)
+            {
+                TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
+                TruckDrop.GameState.rotate = false;
+            } 
+        }
+    },
     update: function ()
     {
-        this.game.physics.arcade.collide(this.truck, this.hill);
+        this.game.physics.arcade.collide(this.truck, this.hill, this.tip);
         this.game.physics.arcade.collide(this.truck, this.object, this.ground);
-        this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);
-        
+        this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);    
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

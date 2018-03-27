@@ -23,17 +23,21 @@ TruckDrop.GameState = {
         //Button to allow the truck to continue if the player has a bomb
         this.continue = this.add.button(0, 550, 'bomb', function()
         {
+            //If there are bombs to use
             if(this.bombs >0)
             {
+                //Use a bomb
                 this.bombs--;
                 this.continueText.setText(this.bombs);
-            
+                //'Boost' over the object
                 this.add.tween(this.truck).to({rotation: -0.4}, 100, "Linear", true);
                 let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);//fix
                 tween.onComplete.add(function()
                 {
+                    //High fall speed
                     this.truck.body.gravity.y = 300;
                     this.truck.body.gravity.x = 1.5;
+                    //Reset rotate
                     TruckDrop.GameState.rotate = false;
                 }, this);
             }
@@ -42,13 +46,13 @@ TruckDrop.GameState = {
                 console.log('GameOver');
             }
         }, this);
-        
+        //Create text to indicate factors and fix them to camera
         this.continue.fixedToCamera = true;
         this.continueText = this.add.text(26, 575, this.bombs, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.continueText.fixedToCamera = true;
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
-
+        //Create map levels
         this.hill = this.initMapLevel('hills', 'HillLayer', false);     
         this.object = this.initMapLevel('objects', 'ObjectLayer', false); 
         
@@ -56,18 +60,25 @@ TruckDrop.GameState = {
         this.coinMap = coinMapArray[1];    
         this.coin = coinMapArray[0];  
 
-        
-        this.truck = this.add.sprite(420, 5, 'truck');
+        //Create the truck (player)
+        this.truck = this.add.sprite(100, 5, 'truck');
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.1, 0.1);
-        
+        //Make the truck a button when at the start
+        this.truck.inputEnabled=true;
+        this.truck.events.onInputDown.add(function()
+        {
+            this.truck.body.velocity.x+=10;
+        }, this);
+        //Enable physics
         this.physics.enable(this.truck, Phaser.Physics.ARCADE);
         this.truck.body.gravity.y = 100;
         this.truck.body.gravity.x = 0.5;
- 
+        //Enable slopes and camera falling
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
+        //Bring text and buttons to the top
         this.world.bringToTop(this.continue);
         this.world.bringToTop(this.continueText);
         this.world.bringToTop(this.scoreText);
@@ -77,8 +88,10 @@ TruckDrop.GameState = {
     },
     initMapLevel: function(mapName, layerName, map)
     {
+        //Create the map
         map = this.add.tilemap (mapName);
         map.addTilesetImage('sandSprite', 'sandSprite');
+        //Set the collisions
         map.setCollision(1);
         map.setCollision(2);
         map.setCollision(3);
@@ -97,10 +110,10 @@ TruckDrop.GameState = {
         map.setCollision(16);
         map.setCollision(17);
         map.setCollision(18);
-        
+        //Create the layer
         var layer = map.createLayer(layerName);
         layer.resizeWorld();
-        
+        //Add slope options see ninja tiles for specific slopes
         this.game.slopes.convertTilemapLayer(layer, {
             2:  'FULL',
             4:  'HALF_BOTTOM_Left',
@@ -108,19 +121,21 @@ TruckDrop.GameState = {
             10:  'HALF_BOTTOM',
             11:  'HALF_BOTTOM'
         });
-        
+        //If the map should also be returned return an array containing both the layer and map
         if(map)
         {
             return [layer, map];
         }
-        
+        //Return the layer
         return layer;
     },
-    ground: function(truck, object)
+    hit: function(truck, object)
     {
         console.log('stop');
+        //If the truck has no gravity it has just hit and the lives need to be affected
         if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0)
         {
+            //Reduce by half a heart and check that the truck is not out of lives
             if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
             {
                 TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
@@ -137,6 +152,7 @@ TruckDrop.GameState = {
                 }
             }
         }
+        //Turn off the truck's movement
         truck.body.gravity.x = 0;
         truck.body.gravity.y = 0;
         truck.body.velocity.x = 0;
@@ -144,30 +160,36 @@ TruckDrop.GameState = {
     },
     collect: function(truck, coin)
     {
+        //Check if it is the silver coin and adjust the score accordingly
+        //Note the indexes are related to the position in the spritesheet
         if(coin.index===9)
         {
             console.log("silver");
             TruckDrop.GameState.score+=2;
             TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
+        //Check if it is the bronze coin and adjust the score accordingly
         else if(coin.index===7)
         {
             console.log("bronze");
             TruckDrop.GameState.score+=1;
             TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
+        //Check if it is the bomb and adjust the available bombs accordingly
         else if(coin.index===18)
         {
             console.log("bomb");
             TruckDrop.GameState.bombs++;
             TruckDrop.GameState.continueText.setText(TruckDrop.GameState.bombs);
         }
+        //Check if it is the gold coin and adjust the score accordingly
         else if(coin.index===8)
         {
             console.log("gold");
             TruckDrop.GameState.score+=3;
             TruckDrop.GameState.scoreText.setText(`Score: ${TruckDrop.GameState.score}`);
         }
+        //Check if it is the heart and adjust the lives
         else if(coin.index===17)
         {
             console.log("heart");
@@ -183,13 +205,15 @@ TruckDrop.GameState = {
                 
             TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("fullHeart");
         }
+        //Remove the collected item
         TruckDrop.GameState.coinMap.removeTile(coin.x, coin.y);
     },
     tip: function(truck, hill)
     {
+        //Reset the gravity, if the truck just passed an obstacle the gravity will be 3 times what it should be
         TruckDrop.GameState.truck.body.gravity.y = 100;
         TruckDrop.GameState.truck.body.gravity.x = 0.5;
-        
+        //If the hill is the incline rotate the truck to match the incline and set the rotate to true
         if(hill.index === 4)
         {
             console.log('hill');
@@ -199,6 +223,7 @@ TruckDrop.GameState = {
                 TruckDrop.GameState.rotate = true;
             }
         }
+        //For any other piece of hill rotate back to 0 and switch rotate to false
         else
         {
            if(TruckDrop.GameState.rotate)
@@ -210,8 +235,9 @@ TruckDrop.GameState = {
     },
     update: function ()
     {
+        //Collisions
         this.game.physics.arcade.collide(this.truck, this.hill, this.tip);
-        this.game.physics.arcade.collide(this.truck, this.object, this.ground);
+        this.game.physics.arcade.collide(this.truck, this.object, this.hit);
         this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);    
     }
 };

@@ -17,6 +17,8 @@ TruckDrop.PreloadState = {
         //this.load.spritesheet('tiles', 'assets/images/ninja-tiles64.png', 64, 64);
         this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 16);
         this.load.spritesheet('truck', 'assets/images/player.png', 117, 59, 5);
+        
+        this.load.text('truckDropData', 'assets/data/truckDropData.json');
     },
     create: function ()
     {

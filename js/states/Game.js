@@ -9,6 +9,11 @@ TruckDrop.GameState = {
         this.truckData = JSON.parse(this.game.cache.getText('truckDropData'));
         //Level tracker
         this.currLevel=0;
+        //Initialize the level
+        this.initLevel();
+    },
+    initLevel: function()
+    {
         //Level Data
         this.currLevelData = this.truckData.Levels[this.currLevel];
         //Number of bombs to be used to propel
@@ -49,6 +54,7 @@ TruckDrop.GameState = {
             else
             {
                 console.log('GameOver');
+                TruckDrop.GameState.checkOver();
             }
         }, this);
         //Create text to indicate factors and fix them to camera
@@ -138,31 +144,40 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
-        //If the truck has no gravity it has just hit and the lives need to be affected
-        if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0)
+        if(TruckDrop.GameState.bombs < 1)
         {
-            //Reduce by half a heart and check that the truck is not out of lives
-            if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
+            console.log('GameOver');
+            TruckDrop.GameState.checkOver();
+        }
+        else
+        {
+            //If the truck has no gravity it has just hit and the lives need to be affected
+            if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0)
             {
-                TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
-            }
-            else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
-            {
-                TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
-            
-                TruckDrop.GameState.currlife--;
-            
-                if(TruckDrop.GameState.currlife<0)
+                //Reduce by half a heart and check that the truck is not out of lives
+                if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
                 {
-                    console.log('GameOver');
+                    TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
+                }
+                else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
+                {
+                    TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
+            
+                    TruckDrop.GameState.currlife--;
+            
+                    if(TruckDrop.GameState.currlife<0)
+                    {
+                        console.log('GameOver');
+                        TruckDrop.GameState.checkOver();
+                    }
                 }
             }
+            //Turn off the truck's movement
+            truck.body.gravity.x = 0;
+            truck.body.gravity.y = 0;
+            truck.body.velocity.x = 0;
+            truck.body.velocity.y = 0;
         }
-        //Turn off the truck's movement
-        truck.body.gravity.x = 0;
-        truck.body.gravity.y = 0;
-        truck.body.velocity.x = 0;
-        truck.body.velocity.y = 0;
     },
     collect: function(truck, coin)
     {
@@ -225,6 +240,28 @@ TruckDrop.GameState = {
                 TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
                 TruckDrop.GameState.rotate = false;
             } 
+        }
+    },
+    checkOver: function()
+    {
+        if(this.currLevel === this.truckData.Levels.length-1)
+        {
+            console.log('GO');//go to end
+        }
+        else
+        {
+            for(let i=0, len=this.currLevelData.lives; i<len; i++)
+            {
+                this.lives[i].destroy();;
+            }
+            this.continue.destroy();
+            this.continueText.destroy();
+            this.scoreText.destroy(); 
+            this.coin.destroy();
+            this.truck.destroy();
+    
+            this.currLevel++;
+            this.initLevel();
         }
     },
     update: function ()

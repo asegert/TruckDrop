@@ -18,6 +18,25 @@
                                     [17, "heart"]
                                 ],
                 "rotation": [4, 0.7]
+            },
+            {
+                "bombs": 1,
+                "lives": 3,
+                "hill": "hills",
+                "object": "objects",
+                "coin": "coins",
+                "truckVelocity": 10,
+                "truckGravityY": 100,
+                "truckGravityX": 0.5,
+                "tileset": "sandSprite",
+                "collectItems": [
+                                    [9, 2], 
+                                    [7, 1], 
+                                    [8, 3], 
+                                    [18, "bomb"], 
+                                    [17, "heart"]
+                                ],
+                "rotation": [4, 0.7]
             }
          ]
 }

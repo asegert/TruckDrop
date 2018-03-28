@@ -8,7 +8,7 @@ TruckDrop.GameState = {
         //JSON Data
         this.truckData = JSON.parse(this.game.cache.getText('truckDropData'));
         //Level tracker
-        this.currLevel=0;
+        this.currLevel=TruckDrop.currLevel;
         //Initialize the level
         this.initLevel();
     },
@@ -20,8 +20,13 @@ TruckDrop.GameState = {
         this.bombs = this.currLevelData.bombs;
         //Score -> based off coins
         this.score = 0;
+        //Indicates if truck is jumping over an obstacle
+        this.jumping = false;
+        //Indicateds if a life adjustment has been made
+        this.livAdjust = false;
         //Current life in array
         this.currlife = this.currLevelData.lives-1;
+        console.log(this.currLevel);
         //Holds the life hearts
         this.lives = new Array();
         for(let i=0, len=this.currLevelData.lives; i<len; i++)
@@ -36,6 +41,10 @@ TruckDrop.GameState = {
             //If there are bombs to use
             if(this.bombs >0)
             {
+                //Can require a hit again
+                this.livAdjust=false;
+                console.log("liv");
+                this.jumping=true;
                 //Use a bomb
                 this.bombs--;
                 this.continueText.setText(this.bombs);
@@ -49,11 +58,16 @@ TruckDrop.GameState = {
                     this.truck.body.gravity.x = this.currLevelData.truckGravityX * 3;
                     //Reset rotate
                     TruckDrop.GameState.rotate = false;
+                    TruckDrop.GameState.jumping = false;
                 }, this);
+            }
+            else if(jumping)
+            {
+                
             }
             else
             {
-                console.log('GameOver');
+                console.log('GameOver no bombs button');
                 TruckDrop.GameState.checkOver();
             }
         }, this);
@@ -64,10 +78,10 @@ TruckDrop.GameState = {
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
         //Create map levels
-        this.hill = this.initMapLevel(this.currLevelData.hill, 'HillLayer', false);     
-        this.object = this.initMapLevel(this.currLevelData.object, 'ObjectLayer', false); 
+        this.hill = this.initMapLevel(this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
+        this.object = this.initMapLevel(this.currLevelData.object[0], this.currLevelData.object[1], false); 
         
-        let coinMapArray = this.initMapLevel(this.currLevelData.coin, 'CoinLayer', true);
+        let coinMapArray = this.initMapLevel(this.currLevelData.coin[0], this.currLevelData.coin[1], true);
         this.coinMap = coinMapArray[1];    
         this.coin = coinMapArray[0];  
 
@@ -103,25 +117,11 @@ TruckDrop.GameState = {
         //Create the map
         map = this.add.tilemap (mapName);
         map.addTilesetImage(this.currLevelData.tileset, this.currLevelData.tileset);
-        //Set the collisions
-        map.setCollision(1);
-        map.setCollision(2);
-        map.setCollision(3);
-        map.setCollision(4);
-        map.setCollision(5);
-        map.setCollision(6);
-        map.setCollision(7);
-        map.setCollision(8);
-        map.setCollision(9);
-        map.setCollision(10);
-        map.setCollision(11);
-        map.setCollision(12);
-        map.setCollision(13);
-        map.setCollision(14);
-        map.setCollision(15);
-        map.setCollision(16);
-        map.setCollision(17);
-        map.setCollision(18);
+       for(let k=0, lngth = (TruckDrop.game.cache.getImage(this.currLevelData.tileset).width/TruckDrop.game.cache.getFrameCount(this.currLevelData.tileset)); k<lngth; k++)
+        {
+            //Set the collisions
+            map.setCollision(k);
+        }
         //Create the layer
         var layer = map.createLayer(layerName);
         layer.resizeWorld();
@@ -131,7 +131,10 @@ TruckDrop.GameState = {
             4:  'HALF_BOTTOM_Left',
             9:  'HALF_BOTTOM',
             10:  'HALF_BOTTOM',
-            11:  'HALF_BOTTOM'
+            11:  'HALF_BOTTOM',
+            22:  'HALF_BOTTOM_Left',
+            31:  'HALF_BOTTOM_Left',
+            40:  'HALF_BOTTOM_Left',
         });
         //If the map should also be returned return an array containing both the layer and map
         if(map)
@@ -144,16 +147,19 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
-        if(TruckDrop.GameState.bombs < 1)
+        if(TruckDrop.GameState.bombs < 1 && !TruckDrop.GameState.jumping)
         {
-            console.log('GameOver');
+            console.log('GameOver hit and no bolmbs');
             TruckDrop.GameState.checkOver();
         }
         else
         {
+            console.log(TruckDrop.GameState.livAdjust);
             //If the truck has no gravity it has just hit and the lives need to be affected
-            if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0)
+            if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0 && !TruckDrop.GameState.livAdjust)
             {
+                console.log('lives');
+                TruckDrop.GameState.livAdjust = true
                 //Reduce by half a heart and check that the truck is not out of lives
                 if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
                 {
@@ -167,7 +173,7 @@ TruckDrop.GameState = {
             
                     if(TruckDrop.GameState.currlife<0)
                     {
-                        console.log('GameOver');
+                        console.log('GameOver no lives');
                         TruckDrop.GameState.checkOver();
                     }
                 }
@@ -206,6 +212,11 @@ TruckDrop.GameState = {
                     console.log("bomb");
                     TruckDrop.GameState.bombs++;
                     TruckDrop.GameState.continueText.setText(TruckDrop.GameState.bombs);
+                }
+                else if(TruckDrop.GameState.currLevelData.collectItems[i][1] === "end")
+                {
+                    console.log('GameOver hit end');
+                    TruckDrop.GameState.checkOver();
                 }
                 else
                 {
@@ -251,18 +262,8 @@ TruckDrop.GameState = {
         }
         else
         {
-            for(let i=0, len=this.currLevelData.lives; i<len; i++)
-            {
-                this.lives[i].destroy();;
-            }
-            this.continue.destroy();
-            this.continueText.destroy();
-            this.scoreText.destroy(); 
-            this.coin.destroy();
-            this.truck.destroy();
-    
-            this.currLevel++;
-            this.initLevel();
+            TruckDrop.currLevel++;
+            this.state.start('Game');
         }
     },
     update: function ()

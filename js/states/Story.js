@@ -3,6 +3,7 @@ var TruckDrop = TruckDrop || {};
 TruckDrop.StoryState = {
     create: function ()
     {
+        TruckDrop.currLevel=0;
         this.game.state.start('Game');
     }
 };

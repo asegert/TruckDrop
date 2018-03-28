@@ -14,9 +14,23 @@ TruckDrop.PreloadState = {
         this.load.tilemap('hills','assets/hill.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('objects','assets/objects.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('coins','assets/coin.json', null, Phaser.Tilemap.TILED_JSON);
-        //this.load.spritesheet('tiles', 'assets/images/ninja-tiles64.png', 64, 64);
-        this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 16);
+        this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 45);
         this.load.spritesheet('truck', 'assets/images/player.png', 117, 59, 5);
+        
+        this.load.tilemap('hillSand','assets/maps/hillSand.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('coinSand','assets/maps/coinSand.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('objectSand','assets/maps/objectSand.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('hillStone','assets/maps/hillStone.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('coinStone','assets/maps/coinStone.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('objectStone','assets/maps/objectStone.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('hillGrass','assets/maps/hillGrass.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('coinGrass','assets/maps/coinGrass.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('objectGrass','assets/maps/objectGrass.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('hillIce','assets/maps/hillIce.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('coinIce','assets/maps/coinIce.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('objectIce','assets/maps/objectIce.json', null, Phaser.Tilemap.TILED_JSON);
+        
+        
         
         this.load.text('truckDropData', 'assets/data/truckDropData.json');
     },

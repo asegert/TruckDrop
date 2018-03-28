@@ -3,9 +3,9 @@
             {
                 "bombs": 1,
                 "lives": 3,
-                "hill": "hills",
-                "object": "objects",
-                "coin": "coins",
+                "hill": ["hillStone", "HillLayerStone"],
+                "object": ["objectStone", "ObjectLayerStone"],
+                "coin": ["coinStone", "CoinLayerStone"],
                 "truckVelocity": 10,
                 "truckGravityY": 100,
                 "truckGravityX": 0.5,
@@ -15,9 +15,70 @@
                                     [7, 1], 
                                     [8, 3], 
                                     [18, "bomb"], 
-                                    [17, "heart"]
+                                    [17, "heart"],
+                                    [5, "end"]
+                                ],
+                "rotation": [31, 0.7]
+            },
+            {
+                "bombs": 1,
+                "lives": 3,
+                "hill": ["hillSand", "HillLayerSand"],
+                "object": ["objectSand", "ObjectLayerSand"],
+                "coin": ["coinSand", "CoinLayerSand"],
+                "truckVelocity": 10,
+                "truckGravityY": 100,
+                "truckGravityX": 0.5,
+                "tileset": "sandSprite",
+                "collectItems": [
+                                    [9, 2], 
+                                    [7, 1], 
+                                    [8, 3], 
+                                    [18, "bomb"], 
+                                    [17, "heart"],
+                                    [5, "end"]
                                 ],
                 "rotation": [4, 0.7]
+            },
+            {
+                "bombs": 1,
+                "lives": 3,
+                "hill": ["hillGrass", "HillLayerGrass"],
+                "object": ["objectGrass", "ObjectLayerGrass"],
+                "coin": ["coinGrass", "CoinLayerGrass"],
+                "truckVelocity": 10,
+                "truckGravityY": 100,
+                "truckGravityX": 0.5,
+                "tileset": "sandSprite",
+                "collectItems": [
+                                    [9, 2], 
+                                    [7, 1], 
+                                    [8, 3], 
+                                    [18, "bomb"], 
+                                    [17, "heart"],
+                                    [5, "end"]
+                                ],
+                "rotation": [22, 0.7]
+            },
+            {
+                "bombs": 1,
+                "lives": 3,
+                "hill": ["hillIce", "HillLayerIce"],
+                "object": ["objectIce", "ObjectLayerIce"],
+                "coin": ["coinIce", "CoinLayerIce"],
+                "truckVelocity": 10,
+                "truckGravityY": 100,
+                "truckGravityX": 0.5,
+                "tileset": "sandSprite",
+                "collectItems": [
+                                    [9, 2], 
+                                    [7, 1], 
+                                    [8, 3], 
+                                    [18, "bomb"], 
+                                    [17, "heart"],
+                                    [5, "end"]
+                                ],
+                "rotation": [40, 0.7]
             }
          ]
 }

@@ -11,9 +11,6 @@ TruckDrop.PreloadState = {
         this.load.image('emptyHeart', 'assets/images/heartEmpty.png');
         this.load.image('halfHeart', 'assets/images/heartHalf.png');
         this.load.image('fullHeart', 'assets/images/heartFull.png');
-        this.load.tilemap('hills','assets/hill.json', null, Phaser.Tilemap.TILED_JSON);
-        this.load.tilemap('objects','assets/objects.json', null, Phaser.Tilemap.TILED_JSON);
-        this.load.tilemap('coins','assets/coin.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 45);
         this.load.spritesheet('truck', 'assets/images/playerSnow.png', 117, 59, 5);
         

@@ -49,16 +49,20 @@ TruckDrop.GameState = {
                 this.bombs--;
                 this.continueText.setText(this.bombs);
                 //'Boost' over the object
-                this.add.tween(this.truck).to({rotation: -0.4}, 100, "Linear", true);
-                let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);//fix
-                tween.onComplete.add(function()
+                let backupTween = this.add.tween(this.truck).to({x: this.truck.x-30}, 1000, "Linear", true);
+                backupTween.onComplete.add(function()
                 {
-                    //High fall speed
-                    this.truck.body.gravity.y = this.currLevelData.truckGravityY * 3;
-                    this.truck.body.gravity.x = this.currLevelData.truckGravityX * 3;
-                    //Reset rotate
-                    TruckDrop.GameState.rotate = false;
-                    TruckDrop.GameState.jumping = false;
+                    this.add.tween(this.truck).to({rotation: -0.4}, 100, "Linear", true);
+                    /*let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
+                    tween.onComplete.add(function()
+                    {
+                        //High fall speed
+                        this.truck.body.gravity.y = this.currLevelData.truckGravityY * 3;
+                        this.truck.body.gravity.x = this.currLevelData.truckGravityX * 3;
+                        //Reset rotate
+                        TruckDrop.GameState.rotate = false;
+                        TruckDrop.GameState.jumping = false;
+                    }, this);*/
                 }, this);
             }
             else if(jumping)
@@ -127,14 +131,27 @@ TruckDrop.GameState = {
         layer.resizeWorld();
         //Add slope options see ninja tiles for specific slopes
         this.game.slopes.convertTilemapLayer(layer, {
-            2:  'FULL',
             4:  'HALF_BOTTOM_Left',
+            6:  'HALF_BOTTOM',
             9:  'HALF_BOTTOM',
             10:  'HALF_BOTTOM',
             11:  'HALF_BOTTOM',
+            12:  'HALF_BOTTOM',
+            15:  'HALF_BOTTOM',
             22:  'HALF_BOTTOM_Left',
+            23:  'HALF_BOTTOM',
+            24:  'HALF_BOTTOM',
+            25:  'HALF_BOTTOM',
+            26:  'HALF_BOTTOM',
             31:  'HALF_BOTTOM_Left',
+            32:  'HALF_BOTTOM',
+            33:  'HALF_BOTTOM',
+            35:  'HALF_BOTTOM',
             40:  'HALF_BOTTOM_Left',
+            41:  'HALF_BOTTOM',
+            42:  'HALF_BOTTOM',
+            43:  'HALF_BOTTOM',
+            44:  'HALF_BOTTOM'
         });
         //If the map should also be returned return an array containing both the layer and map
         if(map)
@@ -147,6 +164,7 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
+        truck.rotation=0;
         if(TruckDrop.GameState.bombs < 1 && !TruckDrop.GameState.jumping)
         {
             console.log('GameOver hit and no bolmbs');
@@ -237,7 +255,7 @@ TruckDrop.GameState = {
         if(hill.index === TruckDrop.GameState.currLevelData.rotation[0])
         {
             console.log('hill');
-            if(!TruckDrop.GameState.rotate)
+            if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
             {
                 TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
                 TruckDrop.GameState.rotate = true;
@@ -246,11 +264,8 @@ TruckDrop.GameState = {
         //For any other piece of hill rotate back to 0 and switch rotate to false
         else
         {
-           if(TruckDrop.GameState.rotate)
-            {
-                TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
-                TruckDrop.GameState.rotate = false;
-            } 
+           TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
+           TruckDrop.GameState.rotate = false;
         }
     },
     checkOver: function()

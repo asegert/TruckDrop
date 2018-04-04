@@ -182,13 +182,13 @@ TruckDrop.GameState = {
     {
         console.log('stop');
         TruckDrop.GameState.currObject=object;
-        if(object.index === 6)
+        if(object.index === 6 && TruckDrop.GameState.truck.rotation === 0)
         {
             TruckDrop.GameState.falling = true;
             //console.log(TruckDrop.GameState.truck.body.velocity.x);
             TruckDrop.GameState.truck.body.velocity.x = TruckDrop.GameState.runningVelocity;
             TruckDrop.GameState.truck.rotation = 0;
-            let fall = TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, (300000/TruckDrop.GameState.runningVelocity), "Linear", true);
+            let fall = TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, (150000/TruckDrop.GameState.runningVelocity), "Linear", true);
             fall.onComplete.add(function()
             {
                 TruckDrop.GameState.falling = false;
@@ -197,6 +197,12 @@ TruckDrop.GameState = {
             TruckDrop.GameState.objectMap.removeTile(object.x, object.y);
             TruckDrop.GameState.currObject = null;
             console.log(TruckDrop.GameState.currObject);
+        }
+        else if(object.index === 6)
+        {
+            TruckDrop.GameState.objectMap.removeTile(object.x, object.y);
+            TruckDrop.GameState.currObject = null;
+            TruckDrop.GameState.truck.body.velocity.x = TruckDrop.GameState.runningVelocity;
         }
         else
         {
@@ -297,9 +303,11 @@ TruckDrop.GameState = {
                 console.log('hill');
                 if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
                 {
-                    TruckDrop.GameState.truck.rotation = 0;
-                    TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
-                    TruckDrop.GameState.rotate = true;
+                    if(TruckDrop.GameState.truck.rotation === 0)
+                    {
+                        TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
+                        TruckDrop.GameState.rotate = true;
+                    }
                 }
             }
             //For any other piece of hill rotate back to 0 and switch rotate to false

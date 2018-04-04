@@ -52,8 +52,8 @@ TruckDrop.GameState = {
                 let backupTween = this.add.tween(this.truck).to({x: this.truck.x-30}, 1000, "Linear", true);
                 backupTween.onComplete.add(function()
                 {
-                    this.add.tween(this.truck).to({rotation: -0.4}, 100, "Linear", true);
-                    /*let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
+                    this.add.tween(this.truck).to({rotation: -0.5}, 100, "Linear", true);
+                    let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
                     tween.onComplete.add(function()
                     {
                         //High fall speed
@@ -62,10 +62,10 @@ TruckDrop.GameState = {
                         //Reset rotate
                         TruckDrop.GameState.rotate = false;
                         TruckDrop.GameState.jumping = false;
-                    }, this);*/
+                    }, this);
                 }, this);
             }
-            else if(jumping)
+            else if(this.jumping)
             {
                 
             }
@@ -95,8 +95,7 @@ TruckDrop.GameState = {
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.1, 0.1);
         //Make the truck a button when at the start
-        this.truck.inputEnabled=true;
-        this.truck.events.onInputDown.add(function()
+        this.gas = this.add.button(300, 400, 'gas', function()
         {
             this.truck.body.velocity.x+=this.currLevelData.truckVelocity;
         }, this);
@@ -164,14 +163,15 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
-        truck.rotation=0;
         if(TruckDrop.GameState.bombs < 1 && !TruckDrop.GameState.jumping)
         {
+            truck.rotation=0;
             console.log('GameOver hit and no bolmbs');
             TruckDrop.GameState.checkOver();
         }
-        else
+        else if(!TruckDrop.GameState.jumping)
         {
+            truck.rotation=0;
             console.log(TruckDrop.GameState.livAdjust);
             //If the truck has no gravity it has just hit and the lives need to be affected
             if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0 && !TruckDrop.GameState.livAdjust)
@@ -248,29 +248,32 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
-        //Reset the gravity, if the truck just passed an obstacle the gravity will be 3 times what it should be
-        TruckDrop.GameState.truck.body.gravity.y = TruckDrop.GameState.currLevelData.truckGravityY;
-        TruckDrop.GameState.truck.body.gravity.x = TruckDrop.GameState.currLevelData.truckGravityX;
-        //If the hill is the incline rotate the truck to match the incline and set the rotate to true
-        if(hill.index === TruckDrop.GameState.currLevelData.rotation[0])
+        if(!TruckDrop.GameState.jumping)
         {
-            console.log('hill');
-            if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
+            //Reset the gravity, if the truck just passed an obstacle the gravity will be 3 times what it should be
+            TruckDrop.GameState.truck.body.gravity.y = TruckDrop.GameState.currLevelData.truckGravityY;
+            TruckDrop.GameState.truck.body.gravity.x = TruckDrop.GameState.currLevelData.truckGravityX;
+            //If the hill is the incline rotate the truck to match the incline and set the rotate to true
+            if(hill.index === TruckDrop.GameState.currLevelData.rotation[0])
             {
-                TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
-                TruckDrop.GameState.rotate = true;
+                console.log('hill');
+                if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
+                {
+                    TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
+                    TruckDrop.GameState.rotate = true;
+                }
             }
-        }
-        //For any other piece of hill rotate back to 0 and switch rotate to false
-        else
-        {
-           TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
-           TruckDrop.GameState.rotate = false;
+            //For any other piece of hill rotate back to 0 and switch rotate to false
+            else
+            {
+                TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
+                TruckDrop.GameState.rotate = false;
+            }
         }
     },
     checkOver: function()
     {
-        if(this.currLevel === this.truckData.Levels.length-1)
+        if(TruckDrop.GameState.currLevel === this.truckData.Levels.length-1)
         {
             console.log('GO');
             this.state.start('End');

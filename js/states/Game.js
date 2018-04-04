@@ -11,6 +11,8 @@ TruckDrop.GameState = {
         this.currLevel=TruckDrop.currLevel;
         //Initialize the level
         this.initLevel();
+        //Stores the object the truck is current;y coliding with
+        this.currObject = null;
     },
     initLevel: function()
     {
@@ -48,17 +50,26 @@ TruckDrop.GameState = {
                 //Use a bomb
                 this.bombs--;
                 this.continueText.setText(this.bombs);
-                //'Boost' over the object
-                let backupTween = this.add.tween(this.truck).to({x: this.truck.x-30}, 1000, "Linear", true);
-                backupTween.onComplete.add(function()
+                let bombThrow = this.add.sprite(TruckDrop.GameState.truck.x + 60, TruckDrop.GameState.truck.y - 20, 'bomb');
+                bombThrow.scale.setTo(0.2, 0.2);
+                let throwTween = this.add.tween(bombThrow).to({x: TruckDrop.GameState.currObject.worldX + 20, y: TruckDrop.GameState.currObject.worldY + 20}, 500, "Linear", true);
+                throwTween.onComplete.add(function()
                 {
-                    this.add.tween(this.truck).to({rotation: -0.5}, 100, "Linear", true);
-                    let tween = this.add.tween(this.truck).to({x: this.truck.x + 300, y: this.truck.y - 100}, 1000, "Linear", true);
-                    tween.onComplete.add(function()
+                    bombThrow.destroy();
+                    let emitter = TruckDrop.GameState.add.emitter(TruckDrop.GameState.currObject.worldX + 20, TruckDrop.GameState.currObject.worldY + 20, 100);
+                    emitter.makeParticles('bomb');
+                    emitter.maxParticleScale = 0.2;
+                    emitter.minParticleScale = 0.2;
+                    emitter.start(true, 2000, null, 10);
+
+                    TruckDrop.GameState.objectMap.removeTile(TruckDrop.GameState.currObject.x, TruckDrop.GameState.currObject.y);
+                    TruckDrop.GameState.currObject = null;
+                    
+                    this.time.events.add(Phaser.Timer.SECOND * 2, function()
                     {
-                        //High fall speed
-                        this.truck.body.gravity.y = this.currLevelData.truckGravityY * 3;
-                        this.truck.body.gravity.x = this.currLevelData.truckGravityX * 3;
+                        TruckDrop.GameState.truck.body.velocity.x = 300;
+                        TruckDrop.GameState.truck.body.gravity.y = TruckDrop.GameState.currLevelData.truckGravityY;
+                        TruckDrop.GameState.truck.body.gravity.x = TruckDrop.GameState.currLevelData.truckGravityX;
                         //Reset rotate
                         TruckDrop.GameState.rotate = false;
                         TruckDrop.GameState.jumping = false;
@@ -83,7 +94,10 @@ TruckDrop.GameState = {
         this.scoreText.fixedToCamera = true;
         //Create map levels
         this.hill = this.initMapLevel(this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
-        this.object = this.initMapLevel(this.currLevelData.object[0], this.currLevelData.object[1], false); 
+        
+        let objectMapArray = this.initMapLevel(this.currLevelData.object[0], this.currLevelData.object[1], true);
+        this.objectMap = objectMapArray[1];    
+        this.object = objectMapArray[0];
         
         let coinMapArray = this.initMapLevel(this.currLevelData.coin[0], this.currLevelData.coin[1], true);
         this.coinMap = coinMapArray[1];    
@@ -94,7 +108,7 @@ TruckDrop.GameState = {
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.1, 0.1);
-        //Make the truck a button when at the start
+        //Make a button to start the truck when at the start, is not fixed to the camera so it cannot be clicked continually
         this.gas = this.add.button(300, 400, 'gas', function()
         {
             this.truck.body.velocity.x+=this.currLevelData.truckVelocity;
@@ -163,6 +177,7 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
+        TruckDrop.GameState.currObject=object;
         if(TruckDrop.GameState.bombs < 1 && !TruckDrop.GameState.jumping)
         {
             truck.rotation=0;

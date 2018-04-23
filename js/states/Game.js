@@ -1,7 +1,7 @@
 var TruckDrop = TruckDrop || {};
 
 TruckDrop.GameState = {
-    create: function ()
+    create: function ()//Try test cliff jump
     {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);

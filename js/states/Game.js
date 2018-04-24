@@ -286,9 +286,6 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
-        console.log(hill);
-        if(!TruckDrop.GameState.jumping)
-        {
             //Reset the gravity, if the truck just passed an obstacle the gravity will be 3 times what it should be
             TruckDrop.GameState.truck.body.gravity.y = TruckDrop.GameState.currLevelData.truckGravityY;
             TruckDrop.GameState.truck.body.gravity.x = TruckDrop.GameState.currLevelData.truckGravityX;
@@ -312,7 +309,6 @@ TruckDrop.GameState = {
                 TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
                 TruckDrop.GameState.rotate = false;
             }
-        }
     },
     checkOver: function()
     {

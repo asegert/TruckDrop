@@ -96,13 +96,13 @@ TruckDrop.GameState = {
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
         //Create map levels
-        this.hill = this.initMapLevel(this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
+        this.hill = this.initMapLevel("hillTest", "TestHill", false);//this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
         
-        let objectMapArray = this.initMapLevel(this.currLevelData.object[0], this.currLevelData.object[1], true);
+        /*let objectMapArray = this.initMapLevel("coinTest", "NewTestCoin", true);//this.currLevelData.object[0], this.currLevelData.object[1], true);
         this.objectMap = objectMapArray[1];    
-        this.object = objectMapArray[0];
+        this.object = objectMapArray[0];*/
         
-        let coinMapArray = this.initMapLevel(this.currLevelData.coin[0], this.currLevelData.coin[1], true);
+        let coinMapArray = this.initMapLevel("coinTest", "TestCoin", true);//this.currLevelData.coin[0], this.currLevelData.coin[1], true);
         this.coinMap = coinMapArray[1];    
         this.coin = coinMapArray[0];  
 
@@ -111,16 +111,11 @@ TruckDrop.GameState = {
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.1, 0.1);
-        //Make a button to start the truck when at the start, is not fixed to the camera so it cannot be clicked continually
-        this.gas = this.add.button(300, 400, 'gas', function()
-        {
-            this.truck.body.velocity.x+=this.currLevelData.truckVelocity;
-            this.runningVelocity = this.truck.body.velocity.x;
-        }, this);
         //Enable physics
         this.physics.enable(this.truck, Phaser.Physics.ARCADE);
         this.truck.body.gravity.y = this.currLevelData.truckGravityY;
         this.truck.body.gravity.x = this.currLevelData.truckGravityX;
+        this.truck.body.collideWorldBounds=true;
         //Enable slopes and camera falling
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
@@ -337,7 +332,18 @@ TruckDrop.GameState = {
         //Collisions
         this.game.physics.arcade.collide(this.truck, this.hill, this.tip);
         this.game.physics.arcade.collide(this.truck, this.object, this.hit);
-        this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);    
+        this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);   
+        
+        if(this.game.input.x>=480)
+        {
+            this.truck.x+=5;
+            console.log('right');
+        }
+        else
+        {
+            this.truck.x-=5;
+            console.log('left');
+        }
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

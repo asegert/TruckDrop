@@ -12,6 +12,7 @@ TruckDrop.PreloadState = {
         this.load.image('halfHeart', 'assets/images/heartHalf.png');
         this.load.image('fullHeart', 'assets/images/heartFull.png');
         this.load.image('gas', 'assets/images/gas.png');
+        this.load.image('parachute', 'assets/images/parachute.png');
         this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 45);
         this.load.spritesheet('truck', 'assets/images/playerSnow.png', 117, 59, 5);
         

@@ -102,10 +102,11 @@ TruckDrop.GameState = {
         this.coin = coinMapArray[0];  
 
         //Create the truck (player)
-        this.truck = this.add.sprite(100, 5, 'truck');
+        this.truck = this.add.sprite(100, 300, 'truck');
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.1, 0.1);
+        this.truck.rotation=0.7
         //Enable physics
         this.physics.enable(this.truck, Phaser.Physics.ARCADE);
         this.truck.body.gravity.y = this.currLevelData.truckGravityY;
@@ -114,6 +115,10 @@ TruckDrop.GameState = {
         //Enable slopes and camera falling
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
+        
+        let parachute = this.add.sprite(-170, -50, 'parachute');
+        parachute.rotation = -0.7
+        this.truck.addChild(parachute);
         //Bring text and buttons to the top
         this.world.bringToTop(this.continue);
         this.world.bringToTop(this.continueText);

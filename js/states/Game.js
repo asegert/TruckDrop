@@ -41,7 +41,7 @@ TruckDrop.GameState = {
             this.lives[i].fixedToCamera = true;
         }
         //Button to allow the truck to continue if the player has a bomb
-        this.continue = this.add.button(0, 550, 'bomb', function()
+        this.continue = this.add.button(800, 550, 'bomb', function()
         {
             //If there are bombs to use
             if(this.bombs >0)
@@ -53,20 +53,16 @@ TruckDrop.GameState = {
                 //Use a bomb
                 this.bombs--;
                 this.continueText.setText(this.bombs);
-                let bombThrow = this.add.sprite(TruckDrop.GameState.truck.x + 60, TruckDrop.GameState.truck.y - 20, 'bomb');
+                let bombThrow = this.add.sprite(-10, 15, 'bomb');
+                this.truck.addChild(bombThrow);
                 bombThrow.scale.setTo(0.2, 0.2);
-                let throwTween = this.add.tween(bombThrow).to({x: TruckDrop.GameState.currObject.worldX + 20, y: TruckDrop.GameState.currObject.worldY + 20}, 500, "Linear", true);
-                throwTween.onComplete.add(function()
-                {
-                    bombThrow.destroy();
-                    let emitter = TruckDrop.GameState.add.emitter(TruckDrop.GameState.currObject.worldX + 20, TruckDrop.GameState.currObject.worldY + 20, 100);
+                
+                    let emitter = TruckDrop.GameState.add.emitter(bombThrow.x - 10, bombThrow.y - 10, 100);
                     emitter.makeParticles('bomb');
                     emitter.maxParticleScale = 0.2;
                     emitter.minParticleScale = 0.2;
                     emitter.start(true, 2000, null, 10);
-
-                    TruckDrop.GameState.objectMap.removeTile(TruckDrop.GameState.currObject.x, TruckDrop.GameState.currObject.y);
-                    TruckDrop.GameState.currObject = null;
+                this.truck.addChild(emitter);
                     
                     this.time.events.add(Phaser.Timer.SECOND * 2, function()
                     {
@@ -77,7 +73,6 @@ TruckDrop.GameState = {
                         TruckDrop.GameState.rotate = false;
                         TruckDrop.GameState.jumping = false;
                     }, this);
-                }, this);
             }
             else if(this.jumping)
             {

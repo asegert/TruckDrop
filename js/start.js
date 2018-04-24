@@ -21,7 +21,7 @@ else
 
 function run()
 {
-    TruckDrop.game = new Phaser.Game(960, 640, Phaser.AUTO);
+    TruckDrop.game = new Phaser.Game(980, 640, Phaser.AUTO);
 
     TruckDrop.game.state.add('Cache', TruckDrop.CacheState);
     TruckDrop.game.state.add('Boot', TruckDrop.BootState); 

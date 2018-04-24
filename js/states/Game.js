@@ -65,7 +65,7 @@ TruckDrop.GameState = {
                 this.truck.addChild(emitter);
                 this.truck.rotation = -0.7;
                 this.parachute.alpha=0;
-                let raiseTween = this.add.tween(this.truck).to({y: this.truck.y - 200}, 1000, "Linear", true);
+                let raiseTween = this.add.tween(this.truck).to({y: this.truck.y - 500}, 1000, "Linear", true);
                 raiseTween.onComplete.add(function()
                 {
                     this.truck.rotation = 0.7;
@@ -286,6 +286,7 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
+        console.log(hill);
         if(!TruckDrop.GameState.jumping)
         {
             //Reset the gravity, if the truck just passed an obstacle the gravity will be 3 times what it should be
@@ -333,15 +334,19 @@ TruckDrop.GameState = {
         this.game.physics.arcade.collide(this.truck, this.object, this.hit);
         this.game.physics.arcade.overlap(this.truck, this.coin, this.collect);   
         
-        if(this.game.input.x>=480)
-        {
-            this.truck.x+=5;
-            console.log('right');
-        }
-        else
-        {
-            this.truck.x-=5;
-            console.log('left');
+        if (this.game.input.mousePointer.isDown || !Phaser.Device.desktop)
+        {   
+            if(this.game.input.x>=480)
+            {
+                this.truck.x+=5;
+                console.log('right');
+            }
+            else
+            {
+                this.truck.x-=5;
+                console.log('left');
+            }
+
         }
     }
 };

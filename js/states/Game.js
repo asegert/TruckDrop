@@ -63,16 +63,15 @@ TruckDrop.GameState = {
                     emitter.minParticleScale = 0.2;
                     emitter.start(true, 2000, null, 10);
                 this.truck.addChild(emitter);
-                    
-                    this.time.events.add(Phaser.Timer.SECOND * 2, function()
-                    {
-                        TruckDrop.GameState.truck.body.velocity.x = 300;
-                        TruckDrop.GameState.truck.body.gravity.y = TruckDrop.GameState.currLevelData.truckGravityY;
-                        TruckDrop.GameState.truck.body.gravity.x = TruckDrop.GameState.currLevelData.truckGravityX;
-                        //Reset rotate
-                        TruckDrop.GameState.rotate = false;
-                        TruckDrop.GameState.jumping = false;
-                    }, this);
+                this.truck.rotation = -0.7;
+                this.parachute.alpha=0;
+                let raiseTween = this.add.tween(this.truck).to({y: this.truck.y - 200}, 1000, "Linear", true);
+                raiseTween.onComplete.add(function()
+                {
+                    this.truck.rotation = 0.7;
+                    this.parachute.alpha = 1;
+                    bombThrow.destroy();
+                }, this);
             }
             else if(this.jumping)
             {
@@ -116,9 +115,9 @@ TruckDrop.GameState = {
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
         
-        let parachute = this.add.sprite(-170, -50, 'parachute');
-        parachute.rotation = -0.7
-        this.truck.addChild(parachute);
+        this.parachute = this.add.sprite(-170, -50, 'parachute');
+        this.parachute.rotation = -0.7
+        this.truck.addChild(this.parachute);
         //Bring text and buttons to the top
         this.world.bringToTop(this.continue);
         this.world.bringToTop(this.continueText);

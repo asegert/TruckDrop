@@ -30,6 +30,7 @@ TruckDrop.PreloadState = {
         this.load.tilemap('objectIce','assets/maps/objectIce.json', null, Phaser.Tilemap.TILED_JSON);
         
         this.load.tilemap('hillTest','assets/maps/hillTest.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.tilemap('obstacleTest','assets/maps/objectTest.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('coinTest','assets/maps/testCoin.json', null, Phaser.Tilemap.TILED_JSON);
         
         this.load.text('truckDropData', 'assets/data/truckDropData.json');

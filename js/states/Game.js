@@ -92,9 +92,9 @@ TruckDrop.GameState = {
         //Create map levels
         this.hill = this.initMapLevel("hillTest", "TestHill", false);//this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
         
-        /*let objectMapArray = this.initMapLevel("coinTest", "NewTestCoin", true);//this.currLevelData.object[0], this.currLevelData.object[1], true);
+        let objectMapArray = this.initMapLevel("obstacleTest", "TestObstacle", true);//this.currLevelData.object[0], this.currLevelData.object[1], true);
         this.objectMap = objectMapArray[1];    
-        this.object = objectMapArray[0];*/
+        this.object = objectMapArray[0];
         
         let coinMapArray = this.initMapLevel("coinTest", "TestCoin", true);//this.currLevelData.coin[0], this.currLevelData.coin[1], true);
         this.coinMap = coinMapArray[1];    
@@ -175,71 +175,31 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
+        console.log(object);
         TruckDrop.GameState.currObject=object;
-        if(object.index === 6 && TruckDrop.GameState.truck.rotation === 0)
+        TruckDrop.GameState.objectMap.removeTile(object.x, object.y);
+            
+        console.log(TruckDrop.GameState.livAdjust);
+        console.log('lives');
+        TruckDrop.GameState.livAdjust = true
+        //Reduce by half a heart and check that the truck is not out of lives
+        if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
         {
-            TruckDrop.GameState.falling = true;
-            //console.log(TruckDrop.GameState.truck.body.velocity.x);
-            TruckDrop.GameState.truck.body.velocity.x = TruckDrop.GameState.runningVelocity;
-            TruckDrop.GameState.truck.rotation = 0;
-            let fall = TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, (150000/TruckDrop.GameState.runningVelocity), "Linear", true);
-            fall.onComplete.add(function()
-            {
-                TruckDrop.GameState.falling = false;
-            }, this);
-            //TruckDrop.GameState.rotate = true;
-            TruckDrop.GameState.objectMap.removeTile(object.x, object.y);
-            TruckDrop.GameState.currObject = null;
-            console.log(TruckDrop.GameState.currObject);
+            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
         }
-        else if(object.index === 6)
+        else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
         {
-            TruckDrop.GameState.objectMap.removeTile(object.x, object.y);
-            TruckDrop.GameState.currObject = null;
-            TruckDrop.GameState.truck.body.velocity.x = TruckDrop.GameState.runningVelocity;
-        }
-        else
-        {
-            if(TruckDrop.GameState.bombs < 1 && !TruckDrop.GameState.jumping)
+            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
+            
+            TruckDrop.GameState.currlife--;
+            
+            if(TruckDrop.GameState.currlife<0)
             {
-                truck.rotation=0;
-                console.log('GameOver hit and no bolmbs');
+                console.log('GameOver no lives');
                 TruckDrop.GameState.checkOver();
             }
-            else if(!TruckDrop.GameState.jumping)
-            {
-                truck.rotation=0;
-                console.log(TruckDrop.GameState.livAdjust);
-                //If the truck has no gravity it has just hit and the lives need to be affected
-                if(truck.body.gravity.x !=0 && truck.body.gravity.y !=0 && !TruckDrop.GameState.livAdjust)
-                {
-                    console.log('lives');
-                    TruckDrop.GameState.livAdjust = true
-                    //Reduce by half a heart and check that the truck is not out of lives
-                    if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
-                    {
-                        TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
-                    }
-                    else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
-                    {
-                        TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
-            
-                        TruckDrop.GameState.currlife--;
-            
-                        if(TruckDrop.GameState.currlife<0)
-                        {
-                            console.log('GameOver no lives');
-                            TruckDrop.GameState.checkOver();
-                        }
-                    }
-                }
-                //Turn off the truck's movement
-                truck.body.gravity.x = 0;
-                truck.body.gravity.y = 0;
-                truck.body.velocity.x = 0;
-                truck.body.velocity.y = 0;
-            }
         }
+        truck.body.velocity.y = TruckDrop.GameState.runningVelocity;
     },
     collect: function(truck, coin)
     {
@@ -325,6 +285,7 @@ TruckDrop.GameState = {
     },
     update: function ()
     {
+        this.runningVelocity = this.truck.body.velocity.y;
         //Collisions
         this.game.physics.arcade.collide(this.truck, this.hill, this.tip);
         this.game.physics.arcade.collide(this.truck, this.object, this.hit);
@@ -332,12 +293,12 @@ TruckDrop.GameState = {
         
         if (this.game.input.mousePointer.isDown || !Phaser.Device.desktop)
         {   
-            if(this.game.input.x>=480)
+            if(this.game.input.x>this.truck.x+5)
             {
                 this.truck.x+=5;
                 console.log('right');
             }
-            else
+            else if(this.game.input.x<this.truck.x-5)
             {
                 this.truck.x-=5;
                 console.log('left');

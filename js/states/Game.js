@@ -41,7 +41,7 @@ TruckDrop.GameState = {
             this.lives[i].fixedToCamera = true;
         }
         //Button to allow the truck to continue if the player has a bomb
-        this.continue = this.add.button(800, 550, 'bomb', function()
+        this.continue = this.add.button(0, 550, 'bomb', function()
         {
             //If there are bombs to use
             if(this.bombs >0)
@@ -89,6 +89,8 @@ TruckDrop.GameState = {
         this.continueText.fixedToCamera = true;
         this.scoreText = this.add.text(800, 5, `Score: ${this.score}`, {fill: "#FFFFFF", stroke: "#000000", strokeThickness: 5});
         this.scoreText.fixedToCamera = true;
+        
+        this.background = this.initMapLevel("BGTest", "TestBG", false);
         //Create map levels
         this.hill = this.initMapLevel("hillTest", "TestHill", false);//this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
         
@@ -185,10 +187,6 @@ TruckDrop.GameState = {
         //Reduce by half a heart and check that the truck is not out of lives
         if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
         {
-            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("halfHeart");
-        }
-        else if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "halfHeart")
-        {
             TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
             
             TruckDrop.GameState.currlife--;
@@ -261,13 +259,6 @@ TruckDrop.GameState = {
                         TruckDrop.GameState.rotate = true;
                     }
                 }
-            }
-            //For any other piece of hill rotate back to 0 and switch rotate to false
-            else if(!TruckDrop.GameState.falling)
-            {
-                console.log(hill.index);
-                TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: 0}, 1, "Linear", true);
-                TruckDrop.GameState.rotate = false;
             }
     },
     checkOver: function()

@@ -145,12 +145,6 @@ TruckDrop.GameState = {
         //Add slope options see ninja tiles for specific slopes
         this.game.slopes.convertTilemapLayer(layer, {
             4:  'HALF_BOTTOM_Left',
-            6:  'HALF_BOTTOM',
-            9:  'HALF_BOTTOM',
-            10:  'HALF_BOTTOM',
-            11:  'HALF_BOTTOM',
-            12:  'HALF_BOTTOM',
-            15:  'HALF_BOTTOM',
             22:  'HALF_BOTTOM_Left',
             23:  'HALF_BOTTOM',
             24:  'HALF_BOTTOM',
@@ -244,22 +238,19 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
-            //Reset the gravity, if the truck just passed an obstacle the gravity will be 3 times what it should be
-            TruckDrop.GameState.truck.body.gravity.y = TruckDrop.GameState.currLevelData.truckGravityY;
-            TruckDrop.GameState.truck.body.gravity.x = TruckDrop.GameState.currLevelData.truckGravityX;
-            //If the hill is the incline rotate the truck to match the incline and set the rotate to true
-            if(hill.index === TruckDrop.GameState.currLevelData.rotation[0])
+        //Fix so rotate to fl
+        if(hill.index === TruckDrop.GameState.currLevelData.rotation[0])
+        {
+            console.log('hill');
+            if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
             {
-                console.log('hill');
-                if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
+                if(TruckDrop.GameState.truck.rotation === 0)
                 {
-                    if(TruckDrop.GameState.truck.rotation === 0)
-                    {
-                        TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
-                        TruckDrop.GameState.rotate = true;
-                    }
+                    TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
+                    TruckDrop.GameState.rotate = true;
                 }
             }
+        }
     },
     checkOver: function()
     {

@@ -53,7 +53,8 @@ TruckDrop.GameState = {
                 //Use a bomb
                 this.bombs--;
                 this.continueText.setText(this.bombs);
-                let bombThrow = this.add.sprite(-10, 15, 'bomb');
+                let bombThrow = this.add.sprite(-100, -100, 'bomb');
+                bombThrow.alpha=0;
                 this.truck.addChild(bombThrow);
                 bombThrow.scale.setTo(0.2, 0.2);
                 
@@ -63,12 +64,12 @@ TruckDrop.GameState = {
                     emitter.minParticleScale = 0.2;
                     emitter.start(true, 2000, null, 10);
                 this.truck.addChild(emitter);
-                this.truck.rotation = -0.7;
+                this.truck.rotation = -1.6;
                 this.parachute.alpha=0;
                 let raiseTween = this.add.tween(this.truck).to({y: this.truck.y - 500}, 1000, "Linear", true);
                 raiseTween.onComplete.add(function()
                 {
-                    this.truck.rotation = 0.7;
+                    this.truck.rotation = 0;
                     this.parachute.alpha = 1;
                     bombThrow.destroy();
                 }, this);
@@ -171,7 +172,51 @@ TruckDrop.GameState = {
         console.log('stop');
         console.log(object);
         TruckDrop.GameState.currObject=object;
-        TruckDrop.GameState.objectMap.removeTile(object.x, object.y);
+        
+        let three = [1, 2, 3, 4, 5, 6];
+        let two = [19, 20, 21, 22, 24, 25, 26, 27];
+        let one = [13, 14];
+        let indices = [1, 1, 1, 1, 1, 1, null, null, null, null, null, null, 14, 14, null, null, null, null, 19, 19, 19, 19, null, 24, 24, 24, 24];
+        if(three.includes(object.index))
+        {
+            let startX = object.x + (indices[object.index] - object.index);
+            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-2:object.y+1;
+            
+            console.log(startX);
+            console.log(startY);
+            
+            TruckDrop.GameState.objectMap.removeTile(startX, startY);
+            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
+            TruckDrop.GameState.objectMap.removeTile(startX + 2, startY);
+            TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
+            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
+            TruckDrop.GameState.objectMap.removeTile(startX + 2, startY + 1);
+        }
+        else if(two.includes(object.index))
+        {
+            console.log('TWO')
+            let startX = object.x + (indices[object.index] - object.index);
+            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-2:object.y+1;
+            
+            console.log(startX);
+            console.log(startY);
+            
+            TruckDrop.GameState.objectMap.removeTile(startX, startY);
+            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
+            TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
+            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
+        }
+        else if(one.includes(object.index))
+        {
+            let startX = object.x;
+            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-1:object.y+1;
+            
+            console.log(startX);
+            console.log(startY);
+            
+            TruckDrop.GameState.objectMap.removeTile(startX, startY);
+            TruckDrop.GameState.objectMap.removeTile(startX, startY - 1);
+        }
             
         console.log(TruckDrop.GameState.livAdjust);
         console.log('lives');

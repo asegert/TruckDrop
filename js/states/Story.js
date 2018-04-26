@@ -4,7 +4,7 @@ TruckDrop.StoryState = {
     create: function ()
     {
         TruckDrop.currLevel=0;
-        this.game.state.start('Game');
+        this.game.state.start('Transition');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

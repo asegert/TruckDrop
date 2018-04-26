@@ -28,6 +28,7 @@ function run()
     TruckDrop.game.state.add('Preload', TruckDrop.PreloadState); 
     TruckDrop.game.state.add('Game', TruckDrop.GameState);
     TruckDrop.game.state.add('Story', TruckDrop.StoryState);
+    TruckDrop.game.state.add('Transition', TruckDrop.TransitionState);
     TruckDrop.game.state.add('End', TruckDrop.EndState);
 
     TruckDrop.game.state.start('Cache');

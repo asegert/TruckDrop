@@ -170,7 +170,6 @@ TruckDrop.GameState = {
     hit: function(truck, object)
     {
         console.log('stop');
-        console.log(object);
         TruckDrop.GameState.currObject=object;
         
         let three = [1, 2, 3, 4, 5, 6];
@@ -180,10 +179,7 @@ TruckDrop.GameState = {
         if(three.includes(object.index))
         {
             let startX = object.x + (indices[object.index] - object.index);
-            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-2:object.y+1;
-            
-            console.log(startX);
-            console.log(startY);
+            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]+3?object.y:object.y-1;
             
             TruckDrop.GameState.objectMap.removeTile(startX, startY);
             TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
@@ -194,12 +190,8 @@ TruckDrop.GameState = {
         }
         else if(two.includes(object.index))
         {
-            console.log('TWO')
             let startX = object.x + (indices[object.index] - object.index);
             let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-2:object.y+1;
-            
-            console.log(startX);
-            console.log(startY);
             
             TruckDrop.GameState.objectMap.removeTile(startX, startY);
             TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
@@ -210,9 +202,6 @@ TruckDrop.GameState = {
         {
             let startX = object.x;
             let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-1:object.y+1;
-            
-            console.log(startX);
-            console.log(startY);
             
             TruckDrop.GameState.objectMap.removeTile(startX, startY);
             TruckDrop.GameState.objectMap.removeTile(startX, startY - 1);

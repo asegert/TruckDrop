@@ -103,10 +103,10 @@ TruckDrop.GameState = {
         this.coin = coinMapArray[0];  
 
         //Create the truck (player)
-        this.truck = this.add.sprite(100, 300, 'truck');
+        this.truck = this.add.sprite(300, 300, 'truck');
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
-        this.truck.anchor.setTo(0.1, 0.1);
+        this.truck.anchor.setTo(0.9, 0.9);
         //Enable physics
         this.physics.enable(this.truck, Phaser.Physics.ARCADE);
         this.truck.body.gravity.y = this.currLevelData.truckGravityY;
@@ -116,7 +116,7 @@ TruckDrop.GameState = {
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
         
-        this.parachute = this.add.sprite(-70, -155, 'parachute');
+        this.parachute = this.add.sprite(-170, -235, 'parachute');
         this.truck.addChild(this.parachute);
         //Bring text and buttons to the top
         this.world.bringToTop(this.continue);
@@ -236,12 +236,14 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
-        //Fix so rotate to fl
-        truck.rotation = 0;
         if(TruckDrop.GameState.endTween === undefined)
         {
             TruckDrop.GameState.parachute.alpha = 0;
-            TruckDrop.GameState.endTween = TruckDrop.GameState.add.tween(truck).to({x:1000}, 2000, "Linear", true);
+            TruckDrop.GameState.endTween = TruckDrop.GameState.add.tween(truck).to({rotation: -0.7}, 1000, "Linear", true);
+            TruckDrop.GameState.endTween.onComplete.add(function()
+            {
+                TruckDrop.GameState.add.tween(truck).to({x:1000}, 2000, "Linear", true);
+            }, this);
         }
     },
     checkOver: function()

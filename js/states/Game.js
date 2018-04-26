@@ -239,17 +239,11 @@ TruckDrop.GameState = {
     tip: function(truck, hill)
     {
         //Fix so rotate to fl
-        if(hill.index === TruckDrop.GameState.currLevelData.rotation[0])
+        truck.rotation = 0;
+        if(TruckDrop.GameState.endTween === undefined)
         {
-            console.log('hill');
-            if(!TruckDrop.GameState.rotate && !TruckDrop.GameState.jumping)
-            {
-                if(TruckDrop.GameState.truck.rotation === 0)
-                {
-                    TruckDrop.GameState.add.tween(TruckDrop.GameState.truck).to({rotation: TruckDrop.GameState.currLevelData.rotation[1]}, 750, "Linear", true);
-                    TruckDrop.GameState.rotate = true;
-                }
-            }
+            TruckDrop.GameState.parachute.alpha = 0;
+            TruckDrop.GameState.endTween = TruckDrop.GameState.add.tween(truck).to({x:1000}, 2000, "Linear", true);
         }
     },
     checkOver: function()

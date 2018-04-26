@@ -107,7 +107,6 @@ TruckDrop.GameState = {
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.1, 0.1);
-        this.truck.rotation=0.7
         //Enable physics
         this.physics.enable(this.truck, Phaser.Physics.ARCADE);
         this.truck.body.gravity.y = this.currLevelData.truckGravityY;
@@ -117,8 +116,7 @@ TruckDrop.GameState = {
         this.game.slopes.enable(this.truck);
         this.game.camera.follow(this.truck);
         
-        this.parachute = this.add.sprite(-170, -50, 'parachute');
-        this.parachute.rotation = -0.7
+        this.parachute = this.add.sprite(-70, -155, 'parachute');
         this.truck.addChild(this.parachute);
         //Bring text and buttons to the top
         this.world.bringToTop(this.continue);

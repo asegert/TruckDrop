@@ -8,6 +8,11 @@ TruckDrop.TransitionState = {
         truck.animations.add('roll');
         truck.animations.play('roll', 5, true);
         
+        let roundText = this.add.text(300, 0, `Drop: ${TruckDrop.currLevel+1}`, {fill: '#00CC00', font: '120px ArialBold', stroke: '#00AA00', strokeThickness: 20});
+        roundText.alpha=0;
+        let textTween = this.add.tween(roundText).to({alpha: 1}, 500, "Linear", true, 0, -1);
+        textTween.yoyo(true, 100);
+        
         let startTween = this.add.tween(truck).to({x: 550}, 2000, "Linear", true);
         startTween.onComplete.add(function()
         {

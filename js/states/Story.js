@@ -4,7 +4,24 @@ TruckDrop.StoryState = {
     create: function ()
     {
         TruckDrop.currLevel=0;
-        this.game.state.start('Transition');
+        this.add.sprite(0, 0, 'story');
+        
+        this.climber = this.add.sprite(500, 0, 'climber');
+        this.climber.animations.add('climb');
+        this.climber.animations.play('climb', 2, false);
+        
+        //Create the truck (player)
+        this.truck = this.add.sprite(250, -20, 'truck');
+        this.truck.animations.add('roll');
+        this.truck.animations.play('roll', 5, true);
+        this.truck.anchor.setTo(0.9, 0.9);
+        
+        this.parachute = this.add.sprite(-170, -235, 'parachute');
+        this.truck.addChild(this.parachute);
+        
+        this.add.tween(this.truck).to({y: 1000}, 4000, "Linear", true);
+        
+        //this.game.state.start('Transition');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

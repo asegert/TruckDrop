@@ -7,6 +7,7 @@ TruckDrop.PreloadState = {
         var preloadProgress = this.add.sprite((this.world.width - 540) * 0.5, (this.world.height + 170) * 0.5, 'loading-progress');
         this.load.setPreloadSprite(preloadProgress);
 
+        this.load.image('story', 'assets/images/Story.png');
         this.load.image('bomb', 'assets/images/bomb.png');
         this.load.image('emptyHeart', 'assets/images/heartEmpty.png');
         this.load.image('halfHeart', 'assets/images/heartHalf.png');
@@ -18,6 +19,7 @@ TruckDrop.PreloadState = {
         this.load.spritesheet('truck', 'assets/images/player.png', 116, 100, 5);
         this.load.spritesheet('trucks', 'assets/images/player-Horizontal.png', 117, 59, 5);
         this.load.spritesheet('parasprite', 'assets/images/paraSprite.png', 200, 155, 5);
+        this.load.spritesheet('climber', 'assets/images/climberSpriteSheet.png', 270, 640, 5);
         
         this.load.tilemap('hillSand','assets/maps/hillSand.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('coinSand','assets/maps/coinSand.json', null, Phaser.Tilemap.TILED_JSON);

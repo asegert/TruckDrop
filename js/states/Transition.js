@@ -11,8 +11,16 @@ TruckDrop.TransitionState = {
         let startTween = this.add.tween(truck).to({x: 550}, 2000, "Linear", true);
         startTween.onComplete.add(function()
         {
-            this.add.tween(truck).to({rotation: 0.7}, 1000, "Linear", true);
-            this.add.tween(truck).to({x: 800, y: 700}, 2000, "Linear", true);
+            this.add.tween(truck).to({rotation: 0.8}, 400, "Linear", true);
+            let midTween = this.add.tween(truck).to({x: 640}, 400, "Linear", true);
+            midTween.onComplete.add(function()
+            {
+                let lastTween = this.add.tween(truck).to({x: 800, y: 700}, 1000, "Linear", true);
+                lastTween.onComplete.add(function()
+                {
+                    this.game.state.start('Game');
+                }, this);
+            }, this);
         }, this);
         
         let parachute=this.add.sprite(-160, -40, 'parasprite');
@@ -26,7 +34,6 @@ TruckDrop.TransitionState = {
             parachute.alpha = 1;
             parachute.animations.play('open', 7, false);
         }, this);
-        //Angle down hill and have para fullly opened at start of decent
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

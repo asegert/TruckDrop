@@ -7,7 +7,7 @@
                 "object": ["objectStone", "ObjectLayerStone"],
                 "coin": ["coinStone", "CoinLayerStone"],
                 "truckVelocity": 10,
-                "truckGravityY": 5,
+                "truckGravityY": 120,
                 "truckGravityX": 0.001,
                 "tileset": "sandSprite",
                 "collectItems": [

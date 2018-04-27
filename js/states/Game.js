@@ -295,6 +295,8 @@ TruckDrop.GameState = {
     },
     update: function ()
     {
+        this.truck.body.gravity.y -=0.1;
+        console.log(this.truck.body.gravity.y);
         this.runningVelocity = this.truck.body.velocity.y;
         //Collisions
         this.game.physics.arcade.collide(this.truck, this.hill, this.tip);

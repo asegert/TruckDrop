@@ -3,6 +3,7 @@ var TruckDrop = TruckDrop || {};
 TruckDrop.StoryState = {
     create: function ()
     {
+        //If TruckDrop.currLevel is undefined the story stage is being run for the first time
         if(TruckDrop.currLevel === undefined)
         {
             TruckDrop.currLevel=0;
@@ -29,6 +30,7 @@ TruckDrop.StoryState = {
             }, this);
             this.start.scale.setTo(0.5, 0.5);
         }
+        //Otherwise it is the second time and the instructions should be shown
         else
         {
             this.add.sprite(0, 0, 'instructions');

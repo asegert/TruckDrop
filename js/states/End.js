@@ -10,12 +10,12 @@ TruckDrop.EndState = {
         this.truck.animations.add('roll');
         this.truck.animations.play('roll', 5, true);
         this.truck.anchor.setTo(0.9, 0.9);
-        
+        //Add the parachute
         this.parachute = this.add.sprite(-170, -235, 'parasprite');
         this.parachute.frame = 4;
         this.parachute.animations.add('repack');
         this.truck.addChild(this.parachute);
-        
+        //Have the truck fall
         this.fallTween = this.add.tween(this.truck).to({y: 610}, 4000, "Linear", true);
         this.fallTween.onComplete.add(function()
         {
@@ -32,12 +32,21 @@ TruckDrop.EndState = {
             this.coupon.scale.setTo(0.001, 0.001);
             this.coupon.anchor.setTo(0.5, 0.5);
             this.add.tween(this.coupon.scale).to({x: 0.8, y: 0.8}, 2000, "Linear", true);
-            
+            //If another level needs to run add the button
             if(TruckDrop.currLevel<TruckDrop.maxLevels)
             {
                 this.continue = this.add.button(600, 450, 'start', function()
                 {
                     this.state.start('Transition');
+                }, this);
+                this.continue.scale.setTo(0.8, 0.8);
+            }
+            //Else collect the prize
+            else
+            {
+                this.continue = this.add.button(600, 450, 'start', function()
+                {
+                    
                 }, this);
                 this.continue.scale.setTo(0.8, 0.8);
             }

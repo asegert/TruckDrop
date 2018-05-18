@@ -67,9 +67,9 @@ TruckDrop.GameState = {
                     bombThrow.destroy();
                 }, this);
             }
+            //If there are no more bombs end the game
             else
             {
-                console.log('GameOver no bombs button');
                 TruckDrop.GameState.checkOver();
             }
         }, this);
@@ -158,55 +158,62 @@ TruckDrop.GameState = {
     },
     hit: function(truck, object)
     {
-        TruckDrop.GameState.currObject=object;
-        
-        let three = [1, 2, 3, 4, 5, 6];
-        let two = [19, 20, 21, 22, 24, 25, 26, 27];
-        let one = [13, 14];
-        let indices = [1, 1, 1, 1, 1, 1, null, null, null, null, null, null, 14, 14, null, null, null, null, 19, 19, 19, 19, null, 24, 24, 24, 24];
-        if(three.includes(object.index))
+        console.log(object.index);
+        if(TruckDrop.GameState.currObject===null || object.index!=TruckDrop.GameState.currObject.index)
         {
-            let startX = object.x + (indices[object.index] - object.index);
-            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]+3?object.y:object.y-1;
-            
-            TruckDrop.GameState.objectMap.removeTile(startX, startY);
-            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
-            TruckDrop.GameState.objectMap.removeTile(startX + 2, startY);
-            TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
-            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
-            TruckDrop.GameState.objectMap.removeTile(startX + 2, startY + 1);
-        }
-        else if(two.includes(object.index))
-        {
-            let startX = object.x + (indices[object.index] - object.index);
-            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-2:object.y+1;
-            
-            TruckDrop.GameState.objectMap.removeTile(startX, startY);
-            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
-            TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
-            TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
-        }
-        else if(one.includes(object.index))
-        {
-            let startX = object.x;
-            let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-1:object.y+1;
-            
-            TruckDrop.GameState.objectMap.removeTile(startX, startY);
-            TruckDrop.GameState.objectMap.removeTile(startX, startY - 1);
-        }
-        //Reduce by half a heart and check that the truck is not out of lives
-        if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
-        {
-            TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
-            
-            TruckDrop.GameState.currlife--;
-            
-            if(TruckDrop.GameState.currlife<0)
+            TruckDrop.GameState.currObject=object;
+            //These are the object indices for the objects that will be collided with
+            let three = [1, 2, 3, 4, 5, 6];
+            let two = [19, 20, 21, 22, 24, 25, 26, 27];
+            let one = [13, 14];
+            //Stores the objects right most top corner for the object at each indices
+            let indices = [1, 1, 1, 1, 1, 1, null, null, null, null, null, null, 14, 14, null, null, null, null, 19, 19, 19, 19, null, 24, 24, 24, 24];
+            //Depending on the amount to be removed remove the current tile and other object tiles
+            if(three.includes(object.index))
             {
-                TruckDrop.GameState.checkOver();
+                let startX = object.x + (indices[object.index] - object.index);
+                let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]+3?object.y:object.y-1;
+            
+                TruckDrop.GameState.objectMap.removeTile(startX, startY);
+                TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
+                TruckDrop.GameState.objectMap.removeTile(startX + 2, startY);
+                TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
+                TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
+                TruckDrop.GameState.objectMap.removeTile(startX + 2, startY + 1);
             }
+            else if(two.includes(object.index))
+            {
+                let startX = object.x + (indices[object.index] - object.index);
+                let startY = object.index<indices[object.index]+2?object.y:object.y+1;
+            
+                TruckDrop.GameState.objectMap.removeTile(startX, startY);
+                TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
+                TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
+                TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
+            }
+            else if(one.includes(object.index))
+            {
+                let startX = object.x;
+                let startY = object.index==indices[object.index]?object.y:object.index<indices[object.index]?object.y-1:object.y+1;
+            
+                TruckDrop.GameState.objectMap.removeTile(startX, startY);
+                TruckDrop.GameState.objectMap.removeTile(startX, startY - 1);
+            }
+        //Reduce by half a heart and check that the truck is not out of lives
+            if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
+            {
+                TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
+            
+                TruckDrop.GameState.currlife--;
+            console.log(TruckDrop.GameState.currlife);
+            
+                if(TruckDrop.GameState.currlife<0)
+                {
+                    TruckDrop.GameState.checkOver();
+                }
+            }
+            truck.body.velocity.y = TruckDrop.GameState.runningVelocity;
         }
-        truck.body.velocity.y = TruckDrop.GameState.runningVelocity;
     },
     collect: function(truck, coin)
     {
@@ -249,6 +256,7 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
+        //If the truck has not rotated yet
         if(TruckDrop.GameState.endTween === undefined)
         {
             TruckDrop.GameState.parachute.alpha = 0;
@@ -262,6 +270,7 @@ TruckDrop.GameState = {
     },
     checkOver: function()
     {
+        //Increase the level reset the end tween and launch the ending
         TruckDrop.currLevel++;
         this.endTween = undefined;
         this.state.start('End');

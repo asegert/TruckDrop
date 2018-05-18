@@ -8,6 +8,7 @@ TruckDrop.PreloadState = {
         this.load.setPreloadSprite(preloadProgress);
 
         this.load.image('story', 'assets/images/Story.png');
+        this.load.image('instructions', 'assets/images/instructions.png');
         this.load.image('bomb', 'assets/images/bomb.png');
         this.load.image('emptyHeart', 'assets/images/heartEmpty.png');
         this.load.image('halfHeart', 'assets/images/heartHalf.png');
@@ -46,7 +47,7 @@ TruckDrop.PreloadState = {
     },
     create: function ()
     {
-        this.state.start('End');
+        this.state.start('Story');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

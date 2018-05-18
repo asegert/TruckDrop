@@ -32,6 +32,15 @@ TruckDrop.EndState = {
             this.coupon.scale.setTo(0.001, 0.001);
             this.coupon.anchor.setTo(0.5, 0.5);
             this.add.tween(this.coupon.scale).to({x: 0.8, y: 0.8}, 2000, "Linear", true);
+            
+            if(TruckDrop.currLevel<TruckDrop.maxLevels)
+            {
+                this.continue = this.add.button(600, 450, 'start', function()
+                {
+                    this.state.start('Transition');
+                }, this);
+                this.continue.scale.setTo(0.8, 0.8);
+            }
         }, this);
     }
 };

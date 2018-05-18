@@ -1,7 +1,7 @@
 var TruckDrop = TruckDrop || {};
 
 TruckDrop.GameState = {
-    create: function ()//Try test cliff jump
+    create: function ()
     {
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.plugins.add(Phaser.Plugin.ArcadeSlopes);
@@ -20,16 +20,12 @@ TruckDrop.GameState = {
     {
         //Level Data
         this.currLevelData = this.truckData.Levels[this.currLevel];
+        //Max Levels stored for calculation later
+        TruckDrop.maxLevels = this.truckData.Levels.length;
         //Number of bombs to be used to propel
         this.bombs = this.currLevelData.bombs;
         //Score -> based off coins
         this.score = 0;
-        //Indicates if truck is jumping over an obstacle
-        this.jumping = false;
-        //Indicates that the truck is falling off a 'cliff'
-        this.falling = false;
-        //Indicateds if a life adjustment has been made
-        this.livAdjust = false;
         //Current life in array
         this.currlife = this.currLevelData.lives-1;
         //Holds the life hearts
@@ -46,10 +42,6 @@ TruckDrop.GameState = {
             //If there are bombs to use
             if(this.bombs >0)
             {
-                //Can require a hit again
-                this.livAdjust=false;
-                console.log("liv");
-                this.jumping=true;
                 //Use a bomb
                 this.bombs--;
                 this.continueText.setText(this.bombs);
@@ -66,6 +58,7 @@ TruckDrop.GameState = {
                 this.truck.addChild(emitter);
                 this.truck.rotation = -1.6;
                 this.parachute.alpha=0;
+                //Make the truck jump
                 let raiseTween = this.add.tween(this.truck).to({y: this.truck.y - 500}, 1000, "Linear", true);
                 raiseTween.onComplete.add(function()
                 {
@@ -73,10 +66,6 @@ TruckDrop.GameState = {
                     this.parachute.alpha = 1;
                     bombThrow.destroy();
                 }, this);
-            }
-            else if(this.jumping)
-            {
-                
             }
             else
             {
@@ -93,13 +82,13 @@ TruckDrop.GameState = {
         
         this.background = this.initMapLevel("BGTest", "TestBG", false);
         //Create map levels
-        this.hill = this.initMapLevel("hillTest", "TestHill", false);//this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
+        this.hill = this.initMapLevel(this.currLevelData.hill[0], this.currLevelData.hill[1], false);     
         
-        let objectMapArray = this.initMapLevel("obstacleTest", "TestObstacle", true);//this.currLevelData.object[0], this.currLevelData.object[1], true);
+        let objectMapArray = this.initMapLevel(this.currLevelData.object[0], this.currLevelData.object[1], true);
         this.objectMap = objectMapArray[1];    
         this.object = objectMapArray[0];
         
-        let coinMapArray = this.initMapLevel("coinTest", "TestCoin", true);//this.currLevelData.coin[0], this.currLevelData.coin[1], true);
+        let coinMapArray = this.initMapLevel(this.currLevelData.coin[0], this.currLevelData.coin[1], true);
         this.coinMap = coinMapArray[1];    
         this.coin = coinMapArray[0];  
 
@@ -169,7 +158,6 @@ TruckDrop.GameState = {
     },
     hit: function(truck, object)
     {
-        console.log('stop');
         TruckDrop.GameState.currObject=object;
         
         let three = [1, 2, 3, 4, 5, 6];
@@ -206,10 +194,6 @@ TruckDrop.GameState = {
             TruckDrop.GameState.objectMap.removeTile(startX, startY);
             TruckDrop.GameState.objectMap.removeTile(startX, startY - 1);
         }
-            
-        console.log(TruckDrop.GameState.livAdjust);
-        console.log('lives');
-        TruckDrop.GameState.livAdjust = true
         //Reduce by half a heart and check that the truck is not out of lives
         if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
         {
@@ -219,7 +203,6 @@ TruckDrop.GameState = {
             
             if(TruckDrop.GameState.currlife<0)
             {
-                console.log('GameOver no lives');
                 TruckDrop.GameState.checkOver();
             }
         }
@@ -234,8 +217,6 @@ TruckDrop.GameState = {
             {
                 if(TruckDrop.GameState.currLevelData.collectItems[i][1] === "heart")
                 {
-                    console.log("heart");
-            
                     if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
                     {
                         TruckDrop.GameState.currlife++;
@@ -249,13 +230,11 @@ TruckDrop.GameState = {
                 }
                 else if(TruckDrop.GameState.currLevelData.collectItems[i][1] === "bomb")
                 {
-                    console.log("bomb");
                     TruckDrop.GameState.bombs++;
                     TruckDrop.GameState.continueText.setText(TruckDrop.GameState.bombs);
                 }
                 else if(TruckDrop.GameState.currLevelData.collectItems[i][1] === "end")
                 {
-                    console.log('GameOver hit end');
                     TruckDrop.GameState.checkOver();
                 }
                 else
@@ -270,7 +249,6 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
-        console.log("HILL");
         if(TruckDrop.GameState.endTween === undefined)
         {
             TruckDrop.GameState.parachute.alpha = 0;
@@ -284,20 +262,13 @@ TruckDrop.GameState = {
     },
     checkOver: function()
     {
-        if(TruckDrop.GameState.currLevel === this.truckData.Levels.length-1)
-        {
-            console.log('GO');
-            this.state.start('End');
-        }
-        else
-        {
-            TruckDrop.currLevel++;
-            TruckDrop.GameState.endTween = undefined;
-            this.state.start('Transition');
-        }
+        TruckDrop.currLevel++;
+        this.endTween = undefined;
+        this.state.start('End');
     },
     update: function ()
     {
+        //Update gravity
         this.truck.body.gravity.y -=0.1;
         this.runningVelocity = this.truck.body.velocity.y;
         //Collisions
@@ -307,15 +278,15 @@ TruckDrop.GameState = {
         
         if (this.game.input.mousePointer.isDown || !Phaser.Device.desktop)
         {   
+            //Move right
             if(this.game.input.x>this.truck.x+5)
             {
                 this.truck.x+=5;
-                console.log('right');
             }
+            //Move left
             else if(this.game.input.x<this.truck.x-5)
             {
                 this.truck.x-=5;
-                console.log('left');
             }
 
         }

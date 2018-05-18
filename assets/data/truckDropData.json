@@ -3,10 +3,9 @@
             {
                 "bombs": 1,
                 "lives": 3,
-                "hill": ["hillStone", "HillLayerStone"],
-                "object": ["objectStone", "ObjectLayerStone"],
-                "coin": ["coinStone", "CoinLayerStone"],
-                "truckVelocity": 10,
+                "hill": ["hillTest", "TestHill"],
+                "object": ["obstacleTest", "TestObstacle"],
+                "coin": ["coinTest", "TestCoin"],
                 "truckGravityY": 120,
                 "truckGravityX": 0.001,
                 "tileset": "sandSprite",
@@ -17,16 +16,14 @@
                                     [18, "bomb"], 
                                     [17, "heart"],
                                     [5, "end"]
-                                ],
-                "rotation": [31, 0.7]
+                                ]
             },
             {
                 "bombs": 1,
                 "lives": 3,
-                "hill": ["hillSand", "HillLayerSand"],
-                "object": ["objectSand", "ObjectLayerSand"],
-                "coin": ["coinSand", "CoinLayerSand"],
-                "truckVelocity": 10,
+                "hill": ["hillTest", "TestHill"],
+                "object": ["obstacleTest", "TestObstacle"],
+                "coin": ["coinTest", "TestCoin"],
                 "truckGravityY": 100,
                 "truckGravityX": 0.5,
                 "tileset": "sandSprite",
@@ -37,16 +34,14 @@
                                     [18, "bomb"], 
                                     [17, "heart"],
                                     [5, "end"]
-                                ],
-                "rotation": [4, 0.7]
+                                ]
             },
             {
                 "bombs": 1,
                 "lives": 3,
-                "hill": ["hillGrass", "HillLayerGrass"],
-                "object": ["objectGrass", "ObjectLayerGrass"],
-                "coin": ["coinGrass", "CoinLayerGrass"],
-                "truckVelocity": 10,
+                "hill": ["hillTest", "TestHill"],
+                "object": ["obstacleTest", "TestObstacle"],
+                "coin": ["coinTest", "TestCoin"],
                 "truckGravityY": 100,
                 "truckGravityX": 0.5,
                 "tileset": "sandSprite",
@@ -57,16 +52,14 @@
                                     [18, "bomb"], 
                                     [17, "heart"],
                                     [5, "end"]
-                                ],
-                "rotation": [22, 0.7]
+                                ]
             },
             {
                 "bombs": 1,
                 "lives": 3,
-                "hill": ["hillIce", "HillLayerIce"],
-                "object": ["objectIce", "ObjectLayerIce"],
-                "coin": ["coinIce", "CoinLayerIce"],
-                "truckVelocity": 10,
+                "hill": ["hillTest", "TestHill"],
+                "object": ["obstacleTest", "TestObstacle"],
+                "coin": ["coinTest", "TestCoin"],
                 "truckGravityY": 100,
                 "truckGravityX": 0.5,
                 "tileset": "sandSprite",
@@ -77,8 +70,7 @@
                                     [18, "bomb"], 
                                     [17, "heart"],
                                     [5, "end"]
-                                ],
-                "rotation": [40, 0.7]
+                                ]
             }
          ]
 }

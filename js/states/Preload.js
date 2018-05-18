@@ -15,6 +15,7 @@ TruckDrop.PreloadState = {
         this.load.image('gas', 'assets/images/gas.png');
         this.load.image('parachute', 'assets/images/parachute.png');
         this.load.image('transition1', 'assets/images/transition1.png');
+        this.load.image('coupon', 'assets/images/TruckDrop_coupon.jpg');
         this.load.image('start', 'assets/images/TruckDrop_start_button.png');
         this.load.image('endScreen', 'assets/images/endScreen.png');
         this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 45);
@@ -45,7 +46,7 @@ TruckDrop.PreloadState = {
     },
     create: function ()
     {
-        this.state.start('Story');
+        this.state.start('End');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

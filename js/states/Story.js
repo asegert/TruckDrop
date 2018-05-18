@@ -21,7 +21,11 @@ TruckDrop.StoryState = {
         
         this.add.tween(this.truck).to({y: 1000}, 4000, "Linear", true);
         
-        //this.game.state.start('Transition');
+        this.start = this.add.button(700, 500, 'start', function()
+        {
+            this.game.state.start('Transition');
+        }, this);
+        this.start.scale.setTo(0.5, 0.5);
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

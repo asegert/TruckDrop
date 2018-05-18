@@ -270,6 +270,7 @@ TruckDrop.GameState = {
     },
     tip: function(truck, hill)
     {
+        console.log("HILL");
         if(TruckDrop.GameState.endTween === undefined)
         {
             TruckDrop.GameState.parachute.alpha = 0;
@@ -278,6 +279,7 @@ TruckDrop.GameState = {
             {
                 TruckDrop.GameState.add.tween(truck).to({x:1000}, 2000, "Linear", true);
             }, this);
+            TruckDrop.GameState.checkOver();
         }
     },
     checkOver: function()
@@ -290,6 +292,7 @@ TruckDrop.GameState = {
         else
         {
             TruckDrop.currLevel++;
+            TruckDrop.GameState.endTween = undefined;
             this.state.start('Transition');
         }
     },

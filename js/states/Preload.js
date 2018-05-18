@@ -15,6 +15,8 @@ TruckDrop.PreloadState = {
         this.load.image('gas', 'assets/images/gas.png');
         this.load.image('parachute', 'assets/images/parachute.png');
         this.load.image('transition1', 'assets/images/transition1.png');
+        this.load.image('start', 'assets/images/TruckDrop_start_button.png');
+        this.load.image('endScreen', 'assets/images/endScreen.png');
         this.load.spritesheet('sandSprite', 'assets/images/sandSprite.png', 70, 70, 45);
         this.load.spritesheet('truck', 'assets/images/player.png', 116, 100, 5);
         this.load.spritesheet('trucks', 'assets/images/player-Horizontal.png', 117, 59, 5);

@@ -3,7 +3,7 @@ var TruckDrop = TruckDrop || {};
 TruckDrop.EndState = {
     create: function ()
     {
-        
+        this.add.sprite(0, 0, 'endScreen');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved

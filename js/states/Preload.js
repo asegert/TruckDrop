@@ -8,6 +8,7 @@ TruckDrop.PreloadState = {
         this.load.setPreloadSprite(preloadProgress);
 
         this.load.image('story', 'assets/images/Story.png');
+        this.load.image('title', 'assets/images/title.png');
         this.load.image('instructions', 'assets/images/instructions.png');
         this.load.image('bomb', 'assets/images/bomb.png');
         this.load.image('emptyHeart', 'assets/images/heartEmpty.png');

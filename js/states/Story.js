@@ -22,7 +22,11 @@ TruckDrop.StoryState = {
             this.parachute = this.add.sprite(-170, -235, 'parachute');
             this.truck.addChild(this.parachute);
         
-            this.add.tween(this.truck).to({y: 1000}, 4000, "Linear", true);
+            var fallTween = this.add.tween(this.truck).to({y: 1000}, 4000, "Linear", true);
+            fallTween.onComplete.add(function()
+            {
+                this.add.sprite(0, 50, 'title');
+            }, this);
         
             this.start = this.add.button(700, 500, 'start', function()
             {

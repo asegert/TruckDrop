@@ -158,7 +158,6 @@ TruckDrop.GameState = {
     },
     hit: function(truck, object)
     {
-        console.log(object.index);
         if(TruckDrop.GameState.currObject===null || object.index!=TruckDrop.GameState.currObject.index)
         {
             TruckDrop.GameState.currObject=object;
@@ -180,6 +179,7 @@ TruckDrop.GameState = {
                 TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
                 TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
                 TruckDrop.GameState.objectMap.removeTile(startX + 2, startY + 1);
+                TruckDrop.GameState.currObject.index = -1;
             }
             else if(two.includes(object.index))
             {
@@ -190,6 +190,7 @@ TruckDrop.GameState = {
                 TruckDrop.GameState.objectMap.removeTile(startX + 1, startY);
                 TruckDrop.GameState.objectMap.removeTile(startX, startY + 1);
                 TruckDrop.GameState.objectMap.removeTile(startX + 1, startY + 1);
+                TruckDrop.GameState.currObject.index = -1;
             }
             else if(one.includes(object.index))
             {
@@ -198,6 +199,7 @@ TruckDrop.GameState = {
             
                 TruckDrop.GameState.objectMap.removeTile(startX, startY);
                 TruckDrop.GameState.objectMap.removeTile(startX, startY - 1);
+                TruckDrop.GameState.currObject.index = -1;
             }
         //Reduce by half a heart and check that the truck is not out of lives
             if(TruckDrop.GameState.lives[TruckDrop.GameState.currlife].key === "fullHeart")
@@ -205,7 +207,6 @@ TruckDrop.GameState = {
                 TruckDrop.GameState.lives[TruckDrop.GameState.currlife].loadTexture("emptyHeart");
             
                 TruckDrop.GameState.currlife--;
-            console.log(TruckDrop.GameState.currlife);
             
                 if(TruckDrop.GameState.currlife<0)
                 {
